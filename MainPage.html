@@ -151,7 +151,7 @@
     </div>
     <div class="hero">
         <h1>Welcome to Our Store</h1>
-        <p>Explore our exclusive merchandise and shop the best products.</p>
+        <p>Explore our exclusive merchandise and the best of the best! Products.</p>
     </div>
     <div class="products">
         <div class="product">
@@ -193,6 +193,19 @@
             const sidebar = document.getElementById("sidebar");
             sidebar.style.left = (sidebar.style.left === "0px") ? "-250px" : "0px";
         }
+  document.addEventListener("contextmenu", function (event) {
+    event.preventDefault();
+  });
+document.addEventListener("copy", function (event) {
+    event.preventDefault();
+    alert("Copying is disabled on this website.");
+  });
+document.addEventListener("keydown", function (event) {
+    if ((event.ctrlKey && event.key === "c") || (event.metaKey && event.key === "c")) {
+      event.preventDefault();
+      alert("Copying is disabled.");
+    }
+  });
     </script>
 </body>
 </html>
