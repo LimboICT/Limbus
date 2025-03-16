@@ -113,20 +113,20 @@
         <p>???</p>
         <p>Our team is about delivering the best products and customer service.</p>
     </div>
-</body>
-<script>
-  document.addEventListener("contextmenu", function (event) {
-    event.preventDefault();
-  });
-document.addEventListener("copy", function (event) {
-    event.preventDefault();
-    alert("Copying is disabled on this website.");
-  });
-document.addEventListener("keydown", function (event) {
-    if ((event.ctrlKey && event.key === "c") || (event.metaKey && event.key === "c")) {
-      event.preventDefault();
-      alert("Copying is disabled.");
-    }
-  });
+	<script>
+  	document.addEventListener("contextmenu", function (event) {
+    	event.preventDefault();
+  	});
+	document.addEventListener("copy", function (event) {
+    	event.preventDefault();
+    	alert("Copying is disabled on this website.");
+ 	 });
+	document.addEventListener("keydown", function (event) {
+    	if ((event.ctrlKey && event.key === "c") || (event.metaKey && event.key === "c")) {
+     	 event.preventDefault();
+     	 alert("Copying is disabled.");
+    	}
+ 	 });
 </script>
+</body>
 </html>
