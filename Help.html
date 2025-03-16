@@ -9,6 +9,7 @@
             background-color: #f0f0f0;
         }
         body {
+            user-select: none;
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -123,4 +124,19 @@
         </div>
     </div>
 </body>
+	<script>
+  document.addEventListener("contextmenu", function (event) {
+    event.preventDefault();
+  });
+document.addEventListener("copy", function (event) {
+    event.preventDefault();
+    alert("Copying is disabled on this website.");
+  });
+document.addEventListener("keydown", function (event) {
+    if ((event.ctrlKey && event.key === "c") || (event.metaKey && event.key === "c")) {
+      event.preventDefault();
+      alert("Copying is disabled.");
+    }
+  });
+</script>
 </html>
