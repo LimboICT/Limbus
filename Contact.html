@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Contact Us</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: black;
+            padding: 15px 30px;
+            color: white;
+            width: 100%;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .menu {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            transition: color 0.3s, background 0.3s;
+            border-radius: 5px;
+        }
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .navbar .logo {
+            font-size: 22px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .user-options {
+            display: flex;
+            gap: 15px;
+        }
+        .search-bar {
+            margin-left: 20px;
+        }
+        .search-bar input {
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .contact-container {
+            max-width: 600px;
+            width: 100%;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .contact-container h1 {
+            margin-bottom: 20px;
+        }
+        .contact-container p {
+            font-size: 18px;
+            color: gray;
+            text-align: justify;
+        }
+        .contact-form input, .contact-form textarea {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .contact-form textarea {
+            resize: none;
+        }
+        .contact-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .contact-form button:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">Logo</div>
+        <div class="menu">
+            <a href="MainPage.html">Home</a>
+            <a href="Help.html">Help</a>
+            <a href="More.html">More</a>
+            <a href="About.html">About Us</a>
+            <a href="Contact.html">Contact Us</a>
+        </div>
+		<div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="user-options">
+            <a href="login.html">Log In</a>
+            <a href="signup.html">Sign Up</a>
+        </div>
+    </div>
+    <div class="contact-container">
+        <h1>Contact Us</h1>
+        <p>Have any questions? Feel free to reach out to us! We value your feedback and will get back to you as soon as possible.</p>
+        <form class="contact-form">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+</body>
+</html>
