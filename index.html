@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Welcome</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        .subtitle {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        .enter-button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .enter-button:hover {
+            background: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Welcome to Limbus</div>
+        <div class="subtitle">Discover exclusive merchandise and shop the best of the best products</div>
+        <button class="enter-button" onclick="enterSite()">Enter</button>
+    </div>
+    <script>
+        function enterSite() {
+            window.location.href = 'MainPage.html';
+        }
+    </script>
+</body>
+</html>
