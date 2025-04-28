@@ -9,6 +9,7 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             overflow-x: hidden;
+            transition: opacity 0.5s ease;
         }
         .navbar {
             display: flex;
@@ -57,7 +58,7 @@
             justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
-            padding-top: 100px;
+            padding-top: 120px;
             transition: all 0.3s ease-in-out;
         }
         .product {
@@ -66,13 +67,19 @@
             background: #f9f9f9;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 200px;
+            width: 250px;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .product:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 10px;
         }
         .view-product-btn {
             display: inline-block;
@@ -125,7 +132,7 @@
         }
         .login-signup-btns {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 50px;
         }
         .login-signup-btns a {
             padding: 12px 24px;
@@ -140,13 +147,6 @@
         }
         .login-signup-btns a:hover {
             background-color: gray;
-        }
-        .product-image {
-            width: 100%;
-            height: auto;
-            margin-top: 10px;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -170,28 +170,30 @@
         <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         <a href="MainPage.html">T-Shirts</a>
         <a href="#">Pants</a>
-        <a href="MainPage3.html">Category 3</a>
-        <a href="MainPage4.html">Category 4</a>
+        <a href="MainPage3.html">Accessories</a>
+        <a href="MainPage4.html">Collectibles</a>
     </div>
 
     <div class="products">
         <div class="product">
+            <img src="pants1img.jpg" alt="Plain Pants">
             <h3>Plain Pants</h3>
-            <p>₱300.00</p>
-            <button onclick="window.location.href='ProductPage1.html'" class="view-product-btn">View Product</button>
-            <img src="product1img.jpg" alt="Black Plain T-Shirt" class="product-image">
+            <p>₱200.00</p>
+            <button onclick="viewProduct('Plain Pants', '200.00', 'pants1img.jpg')" class="view-product-btn">View Product</button>
         </div>
+
         <div class="product">
+            <img src="pants2img.jpg" alt="Pants with Cross Designs">
             <h3>Pants with Cross Designs</h3>
-            <p>₱600.00</p>
-            <button onclick="window.location.href='ProductPage2.html'" class="view-product-btn">View Product</button>
-            <img src="product2img.jpg" alt="T-Shirt with Cross Design" class="product-image">
+            <p>₱300.00</p>
+            <button onclick="viewProduct('Pants with Cross Designs', '300.00', 'pants2img.jpg')" class="view-product-btn">View Product</button>
         </div>
+
         <div class="product">
+            <img src="pants3img.jpg" alt="Pants with Smile Designs">
             <h3>Pants with Smile Designs</h3>
-            <p>₱700.00</p>
-            <button onclick="window.location.href='ProductPage3.html'" class="view-product-btn">View Product</button>
-            <img src="product3img.jpg" alt="T-Shirt with Smile Design" class="product-image">
+            <p>₱300.00</p>
+            <button onclick="viewProduct('Pants with Smile Designs', '300.00', 'pants3img.jpg')" class="view-product-btn">View Product</button>
         </div>
     </div>
 
@@ -202,14 +204,24 @@
 
     <script>
         function toggleSidebar() {
-            const sidebar = document.getElementById("sidebar");
-            if (sidebar.style.left === "0px") {
-                sidebar.style.left = "-250px";
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px';
             } else {
-                sidebar.style.left = "0px";
+                sidebar.style.left = '0px';
             }
+        }
+
+        function viewProduct(name, price, image) {
+            document.body.style.opacity = 0;
+
+            setTimeout(() => {
+                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}`;
+                window.location.href = url;
+            }, 500);
         }
     </script>
 
 </body>
 </html>
+
