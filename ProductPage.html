@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Product Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #f0f0f0;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .product-container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            display: inline-block;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+        .product-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .product-container h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .product-container p {
+            font-size: 24px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .select-options {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .select-options label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        .select-options select, .select-options input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .add-cart-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background-color: black;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .add-cart-btn:hover {
+            background-color: gray;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body onload="fadeInBody()">
+
+    <div class="product-container">
+        <img id="product-image" src="" alt="Product Image">
+        <h1 id="product-name">Product Name</h1>
+        <p id="product-price">$0.00</p>
+
+        <div class="select-options">
+            <label for="color">Color:</label>
+            <select id="color">
+                <option value="Black">Black</option>
+                <option value="White">White</option>
+                <option value="Gray">Gray</option>
+            </select>
+
+            <label for="size">Size:</label>
+            <select id="size">
+                <option value="Small">Small</option>
+                <option value="Medium">Medium</option>
+                <option value="Large">Large</option>
+                <option value="XL">XL</option>
+            </select>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" value="1" min="1">
+        </div>
+
+        <button class="add-cart-btn" onclick="addToCart()">Add to Cart</button>
+        <br>
+        <a href="javascript:void(0)" class="back-btn" onclick="goBack()">← Back to Products</a>
+    </div>
+
+    <script>
+        function fadeInBody() {
+            document.body.style.opacity = 1;
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name');
+        const price = params.get('price');
+        const image = params.get('image');
+
+        if (name && price && image) {
+            document.getElementById('product-name').textContent = name;
+            document.getElementById('product-price').textContent = `$${price}`;
+            document.getElementById('product-image').src = image;
+        } else {
+            document.getElementById('product-name').textContent = "Product Not Found";
+            document.getElementById('product-price').textContent = "";
+            document.getElementById('product-image').src = "notfound.jpg";
+        }
+
+        function addToCart() {
+            const selectedColor = document.getElementById('color').value;
+            const selectedSize = document.getElementById('size').value;
+            const selectedQuantity = document.getElementById('quantity').value;
+
+            alert(`Added to Cart:\n${name}\nColor: ${selectedColor}\nSize: ${selectedSize}\nQuantity: ${selectedQuantity}`);
+        }
+    </script>
+
+</body>
+</html>
