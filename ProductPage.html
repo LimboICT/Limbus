@@ -83,7 +83,7 @@
         }
     </style>
 </head>
-<body onload="fadeInBody()">
+<body>
 
     <div class="product-container">
         <img id="product-image" src="" alt="Product Image">
@@ -116,9 +116,15 @@
     </div>
 
     <script>
-        function fadeInBody() {
+        if (performance.navigation.type === 2) {
             document.body.style.opacity = 1;
         }
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.body.style.opacity = 1;
+            }, 10);
+        });
 
         function fadeOutAndGoBack() {
             document.body.style.opacity = 0;
@@ -153,4 +159,3 @@
 
 </body>
 </html>
-
