@@ -9,6 +9,7 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             overflow-x: hidden;
+            transition: opacity 0.5s ease;
         }
         .navbar {
             display: flex;
@@ -192,7 +193,7 @@
             <img src="product3img.jpg" alt="T-Shirt with Smile Designs">
             <h3>T-Shirt with Smile Designs</h3>
             <p>₱400.00</p>
-            <button onclick="viewProduct('Product 3', '400.00', 'product3img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('T-Shirt with Smile Designs', '400.00', 'product3img.jpg')" class="view-product-btn">View Product</button>
         </div>
     </div>
 
@@ -212,13 +213,14 @@
         }
 
         function viewProduct(name, price, image) {
-            const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}`;
-            window.location.href = url;
+            document.body.style.opacity = 0;
+
+            setTimeout(() => {
+                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}`;
+                window.location.href = url;
+            }, 500);
         }
     </script>
 
 </body>
 </html>
-
-
-
