@@ -76,6 +76,7 @@
             color: black;
             text-decoration: none;
             font-size: 16px;
+            cursor: pointer;
         }
         .back-btn:hover {
             text-decoration: underline;
@@ -111,19 +112,23 @@
 
         <button class="add-cart-btn" onclick="addToCart()">Add to Cart</button>
         <br>
-        <a href="#" class="back-btn" id="back-link">← Back to Products</a>
+        <a class="back-btn" onclick="goBack()">← Back to Products</a>
     </div>
 
     <script>
         function fadeInBody() {
-            document.body.style.opacity = 1;
+            if (performance.getEntriesByType("navigation")[0].type !== "back_forward") {
+                document.body.style.opacity = 1;
+            } else {
+                document.body.style.opacity = 1;
+                document.body.style.transition = "none";
+            }
         }
 
         const params = new URLSearchParams(window.location.search);
         const name = params.get('name');
         const price = params.get('price');
         const image = params.get('image');
-        const back = params.get('back');
 
         if (name && price && image) {
             document.getElementById('product-name').textContent = name;
@@ -135,12 +140,6 @@
             document.getElementById('product-image').src = "notfound.jpg";
         }
 
-        if (back) {
-            document.getElementById('back-link').href = back;
-        } else {
-            document.getElementById('back-link').href = 'MainPage.html';
-        }
-
         function addToCart() {
             const selectedColor = document.getElementById('color').value;
             const selectedSize = document.getElementById('size').value;
@@ -148,8 +147,11 @@
 
             alert(`Added to Cart:\n${name}\nColor: ${selectedColor}\nSize: ${selectedSize}\nQuantity: ${selectedQuantity}`);
         }
+
+        function goBack() {
+            window.history.back();
+        }
     </script>
 
 </body>
 </html>
-
