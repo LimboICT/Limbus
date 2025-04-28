@@ -111,7 +111,7 @@
 
         <button class="add-cart-btn" onclick="addToCart()">Add to Cart</button>
         <br>
-        <a href="javascript:void(0)" class="back-btn" onclick="goBack()">← Back to Products</a>
+        <a href="#" class="back-btn" id="back-link">← Back to Products</a>
     </div>
 
     <script>
@@ -119,14 +119,11 @@
             document.body.style.opacity = 1;
         }
 
-        function goBack() {
-            window.history.back();
-        }
-
         const params = new URLSearchParams(window.location.search);
         const name = params.get('name');
         const price = params.get('price');
         const image = params.get('image');
+        const back = params.get('back');
 
         if (name && price && image) {
             document.getElementById('product-name').textContent = name;
@@ -136,6 +133,12 @@
             document.getElementById('product-name').textContent = "Product Not Found";
             document.getElementById('product-price').textContent = "";
             document.getElementById('product-image').src = "notfound.jpg";
+        }
+
+        if (back) {
+            document.getElementById('back-link').href = back;
+        } else {
+            document.getElementById('back-link').href = 'MainPage.html';
         }
 
         function addToCart() {
@@ -149,3 +152,4 @@
 
 </body>
 </html>
+
