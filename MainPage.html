@@ -8,6 +8,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
+            overflow-x: hidden;
         }
         .navbar {
             display: flex;
@@ -42,10 +43,6 @@
         .navbar a:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .user-options {
-            display: flex;
-            gap: 15px;
-        }
         .search-bar {
             margin-left: 20px;
         }
@@ -54,6 +51,45 @@
             border: none;
             border-radius: 5px;
             font-size: 14px;
+        }
+        .products {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding-top: 100px;
+            transition: all 0.3s ease-in-out;
+        }
+        .product {
+            text-align: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .view-product-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            text-decoration: none;
+            color: white;
+            background-color: black;
+            border-radius: 5px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            margin-top: 10px;
+        }
+        .view-product-btn:hover {
+            background-color: gray;
+            transform: scale(1.05);
         }
         .sidebar {
             height: 100%;
@@ -64,7 +100,7 @@
             background-color: black;
             color: white;
             overflow-x: hidden;
-            transition: left 0.3s ease-in-out;
+            transition: left 0.3s ease;
             padding-top: 60px;
             z-index: 999;
         }
@@ -75,6 +111,7 @@
             color: white;
             text-align: center;
             border-bottom: 1px solid #333;
+            transition: background 0.3s;
         }
         .sidebar a:hover {
             background-color: rgba(255, 255, 255, 0.2);
@@ -86,53 +123,28 @@
             font-size: 30px;
             cursor: pointer;
         }
-        .hero, .products, .buttons {
+        .login-signup-btns {
             text-align: center;
-            padding: 100px 20px;
-            background-color: white;
+            margin-top: 30px;
         }
-        .hero h1, .products h3, .buttons a {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-        .hero p, .products p {
-            font-size: 18px;
-            color: gray;
-        }
-        .products {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .product {
-            text-align: center;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 200px;
-        }
-        .buttons a {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
+        .login-signup-btns a {
+            padding: 12px 24px;
             text-decoration: none;
             color: white;
             background-color: black;
             border-radius: 5px;
+            font-size: 16px;
+            margin: 0 10px;
+            display: inline-block;
             transition: background 0.3s;
         }
-        .buttons a:hover {
+        .login-signup-btns a:hover {
             background-color: gray;
-        }
-        .logo {
-            cursor: pointer;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
+
     <div class="navbar">
         <div class="logo" onclick="toggleSidebar()">Limbus</div>
         <div class="menu">
@@ -145,36 +157,8 @@
         <div class="search-bar">
             <input type="text" placeholder="Search...">
         </div>
-        <div class="user-options">
-            <a href="Login.html">Log In</a>
-            <a href="Signup.html">Sign Up</a>
-        </div>
     </div>
-    <div class="hero">
-        <h1>Welcome to Our Store</h1>
-        <p>Explore our exclusive merchandise and the best of the best! Products.</p>
-    </div>
-    <div class="products">
-        <div class="product">
-            <img src="" alt="Item 1">
-            <h3>Product Name</h3>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="" alt="Item 2">
-            <h3>Product Name</h3>
-            <p>Price</p>
-        </div>
-        <div class="product">
-            <img src="" alt="Item 3">
-            <h3>Product Name</h3>
-            <p>Price</p>
-        </div>
-    </div>
-    <div class="buttons">
-        <a href="Login.html">Log In</a>
-        <a href="Signup.html">Sign Up</a>
-    </div>
+
     <div class="sidebar" id="sidebar">
         <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         <a href="#">Category 1</a>
@@ -188,26 +172,41 @@
         <a href="#">Category 9</a>
         <a href="#">Category 10</a>
     </div>
-    
+
+    <div class="products">
+        <div class="product">
+            <h3>Product 1</h3>
+            <p>$99.99</p>
+            <button onclick="window.location.href='ProductPage1.html'" class="view-product-btn">View Product</button>
+        </div>
+        <div class="product">
+            <h3>Product 2</h3>
+            <p>$59.99</p>
+            <button onclick="window.location.href='ProductPage2.html'" class="view-product-btn">View Product</button>
+        </div>
+        <div class="product">
+            <h3>Product 3</h3>
+            <p>$39.99</p>
+            <button onclick="window.location.href='ProductPage3.html'" class="view-product-btn">View Product</button>
+        </div>
+    </div>
+
+    <div class="login-signup-btns">
+        <a href="Login.html">Log In</a>
+        <a href="Signup.html">Sign Up</a>
+    </div>
+
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById("sidebar");
-            sidebar.style.left = (sidebar.style.left === "0px") ? "-250px" : "0px";
+            if (sidebar.style.left === "0px") {
+                sidebar.style.left = "-250px";
+            } else {
+                sidebar.style.left = "0px";
+            }
         }
-  document.addEventListener("contextmenu", function (event) {
-    event.preventDefault();
-  });
-document.addEventListener("copy", function (event) {
-    event.preventDefault();
-    alert("Copying is disabled on this website.");
-  });
-document.addEventListener("keydown", function (event) {
-    if ((event.ctrlKey && event.key === "c") || (event.metaKey && event.key === "c")) {
-      event.preventDefault();
-      alert("Copying is disabled.");
-    }
-  });
     </script>
+
 </body>
 </html>
 
