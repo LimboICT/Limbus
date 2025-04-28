@@ -112,17 +112,19 @@
 
         <button class="add-cart-btn" onclick="addToCart()">Add to Cart</button>
         <br>
-        <a class="back-btn" onclick="goBack()">← Back to Products</a>
+        <a class="back-btn" onclick="fadeOutAndGoBack()">← Back to Products</a>
     </div>
 
     <script>
         function fadeInBody() {
-            if (performance.getEntriesByType("navigation")[0].type !== "back_forward") {
-                document.body.style.opacity = 1;
-            } else {
-                document.body.style.opacity = 1;
-                document.body.style.transition = "none";
-            }
+            document.body.style.opacity = 1;
+        }
+
+        function fadeOutAndGoBack() {
+            document.body.style.opacity = 0;
+            setTimeout(function() {
+                history.back();
+            }, 500);
         }
 
         const params = new URLSearchParams(window.location.search);
@@ -147,11 +149,8 @@
 
             alert(`Added to Cart:\n${name}\nColor: ${selectedColor}\nSize: ${selectedSize}\nQuantity: ${selectedQuantity}`);
         }
-
-        function goBack() {
-            window.history.back();
-        }
     </script>
 
 </body>
 </html>
+
