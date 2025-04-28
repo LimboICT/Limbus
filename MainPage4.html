@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Main Page</title>
+    <style>
+        body {
+            user-select: none;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            overflow-x: hidden;
+            transition: opacity 0.5s ease;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: black;
+            padding: 15px 30px;
+            color: white;
+            width: 100%;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .menu {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            transition: color 0.3s, background 0.3s;
+            border-radius: 5px;
+        }
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .search-bar {
+            margin-left: 20px;
+        }
+        .search-bar input {
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .products {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding-top: 120px;
+            transition: all 0.3s ease-in-out;
+        }
+        .product {
+            text-align: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .view-product-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            text-decoration: none;
+            color: white;
+            background-color: black;
+            border-radius: 5px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            margin-top: 10px;
+        }
+        .view-product-btn:hover {
+            background-color: gray;
+            transform: scale(1.05);
+        }
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            background-color: black;
+            color: white;
+            overflow-x: hidden;
+            transition: left 0.3s ease;
+            padding-top: 60px;
+            z-index: 999;
+        }
+        .sidebar a {
+            display: block;
+            padding: 15px;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            transition: background 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .login-signup-btns {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .login-signup-btns a {
+            padding: 12px 24px;
+            text-decoration: none;
+            color: white;
+            background-color: black;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 0 10px;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        .login-signup-btns a:hover {
+            background-color: gray;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo" onclick="toggleSidebar()">Limbus</div>
+        <div class="menu">
+            <a href="MainPage.html">Home</a>
+            <a href="Help.html">Help</a>
+            <a href="More.html">More</a>
+            <a href="About.html">About Us</a>
+            <a href="Contact.html">Contact Us</a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        <a href="MainPage.html">T-Shirts</a>
+        <a href="MainPage2.html">Pants</a>
+        <a href="MainPage3.html">Accessories</a>
+        <a href="#">Collectibles</a>
+    </div>
+
+    <div class="products">
+        <div class="product">
+            <img src="co1img.jpg" alt="Limbos Slashers Keychain">
+            <h3>Limbos Slashers Keychain</h3>
+            <p>₱30.00</p>
+            <button onclick="viewProduct('Limbos Slashers Keychain', '30.00', 'co1img.jpg')" class="view-product-btn">View Product</button>
+        </div>
+
+        <div class="product">
+            <img src="co2img.jpg" alt="Limbos Double Edge Katana">
+            <h3>Limbos Double Edge Katana</h3>
+            <p>₱1599.99</p>
+            <button onclick="viewProduct('Limbos Double Edge Katana', '1599.99', 'co2img.jpg')" class="view-product-btn">View Product</button>
+        </div>
+
+        <div class="product">
+            <img src="co3img.jpg" alt="Limbos Double Edge Keychain">
+            <h3>Limbos Double Edge Keychain</h3>
+            <p>₱40.00</p>
+            <button onclick="viewProduct('Limbos Double Edge Keychain', '40.00', 'co3img.jpg')" class="view-product-btn">View Product</button>
+        </div>
+    </div>
+
+    <div class="login-signup-btns">
+        <a href="Login.html">Log In</a>
+        <a href="Signup.html">Sign Up</a>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px';
+            } else {
+                sidebar.style.left = '0px';
+            }
+        }
+
+        function viewProduct(name, price, image) {
+            document.body.style.opacity = 0;
+
+            setTimeout(() => {
+                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}`;
+                window.location.href = url;
+            }, 500);
+        }
+    </script>
+
+</body>
+</html>
