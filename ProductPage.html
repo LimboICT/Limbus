@@ -184,8 +184,22 @@
 
             const selectedQuantity = document.getElementById('quantity').value;
             message += `\nQuantity: ${selectedQuantity}`;
-
+            
             alert(message);
+
+            // Save to localStorage
+            const cartItem = {
+                name,
+                price,
+                image,
+                color: hasColor ? document.getElementById('color').value : null,
+                size: hasSize ? document.getElementById('size').value : null,
+                quantity: selectedQuantity
+            };
+            
+            const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
+            currentCart.push(cartItem);
+            localStorage.setItem("cart", JSON.stringify(currentCart));
         }
     </script>
 
