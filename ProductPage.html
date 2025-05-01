@@ -45,14 +45,17 @@
             margin: 10px 0 5px;
             font-weight: bold;
         }
-        .select-options select, .select-options input[type="number"] {
+        .select-options select,
+        .select-options input[type="number"] {
             width: 100%;
             padding: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
             margin-bottom: 15px;
             font-size: 16px;
+            box-sizing: border-box; 
         }
+
         .add-cart-btn {
             display: inline-block;
             width: 100%;
@@ -65,11 +68,14 @@
             margin-top: 10px;
             border: none;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.3s;
         }
+
         .add-cart-btn:hover {
             background-color: gray;
+            transform: scale(1.05);
         }
+
         .back-btn {
             display: inline-block;
             margin-top: 20px;
@@ -78,6 +84,7 @@
             font-size: 16px;
             cursor: pointer;
         }
+
         .back-btn:hover {
             text-decoration: underline;
         }
@@ -91,20 +98,24 @@
         <p id="product-price">$0.00</p>
 
         <div class="select-options">
-            <label for="color">Color:</label>
-            <select id="color">
-                <option value="Black">Black</option>
-                <option value="White">White</option>
-                <option value="Gray">Gray</option>
-            </select>
+            <div id="color-option">
+                <label for="color">Color:</label>
+                <select id="color">
+                    <option value="Black">Black</option>
+                    <option value="White">White</option>
+                    <option value="Gray">Gray</option>
+                </select>
+            </div>
 
-            <label for="size">Size:</label>
-            <select id="size">
-                <option value="Small">Small</option>
-                <option value="Medium">Medium</option>
-                <option value="Large">Large</option>
-                <option value="XL">XL</option>
-            </select>
+            <div id="size-option">
+                <label for="size">Size:</label>
+                <select id="size">
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                    <option value="XL">XL</option>
+                </select>
+            </div>
 
             <label for="quantity">Quantity:</label>
             <input type="number" id="quantity" value="1" min="1">
@@ -120,15 +131,15 @@
             document.body.style.opacity = 1;
         }
 
-        window.addEventListener('load', function() {
-            setTimeout(function() {
+        window.addEventListener('load', function () {
+            setTimeout(function () {
                 document.body.style.opacity = 1;
             }, 10);
         });
 
         function fadeOutAndGoBack() {
             document.body.style.opacity = 0;
-            setTimeout(function() {
+            setTimeout(function () {
                 history.back();
             }, 500);
         }
@@ -137,6 +148,8 @@
         const name = params.get('name');
         const price = params.get('price');
         const image = params.get('image');
+        const hasSize = params.get('hasSize') === 'true';
+        const hasColor = params.get('hasColor') === 'true';
 
         if (name && price && image) {
             document.getElementById('product-name').textContent = name;
@@ -148,12 +161,31 @@
             document.getElementById('product-image').src = "notfound.jpg";
         }
 
-        function addToCart() {
-            const selectedColor = document.getElementById('color').value;
-            const selectedSize = document.getElementById('size').value;
-            const selectedQuantity = document.getElementById('quantity').value;
+        if (!hasColor) {
+            document.getElementById('color-option').style.display = 'none';
+        }
 
-            alert(`Added to Cart:\n${name}\nColor: ${selectedColor}\nSize: ${selectedSize}\nQuantity: ${selectedQuantity}`);
+        if (!hasSize) {
+            document.getElementById('size-option').style.display = 'none';
+        }
+
+        function addToCart() {
+            let message = `Added to Cart:\n${name}`;
+
+            if (hasColor) {
+                const selectedColor = document.getElementById('color').value;
+                message += `\nColor: ${selectedColor}`;
+            }
+
+            if (hasSize) {
+                const selectedSize = document.getElementById('size').value;
+                message += `\nSize: ${selectedSize}`;
+            }
+
+            const selectedQuantity = document.getElementById('quantity').value;
+            message += `\nQuantity: ${selectedQuantity}`;
+
+            alert(message);
         }
     </script>
 
