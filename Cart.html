@@ -7,7 +7,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             background-color: #f0f0f0;
-            padding-top: 100px; /* To prevent content being hidden behind navbar */
+            padding-top: 100px;
         }
         .navbar {
             display: flex;
@@ -74,16 +74,26 @@
             color: #333;
             margin-top: 5px;
         }
-        .remove-item-btn {
+        .remove-item-btn, .edit-item-btn {
             padding: 8px 15px;
-            background-color: red;
+            margin-top: 5px;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            display: block;
+        }
+        .remove-item-btn {
+            background-color: red;
         }
         .remove-item-btn:hover {
             background-color: darkred;
+        }
+        .edit-item-btn {
+            background-color: #007bff;
+        }
+        .edit-item-btn:hover {
+            background-color: #0056b3;
         }
         .total-price {
             margin-top: 20px;
@@ -114,89 +124,91 @@
 </head>
 <body>
 
-    <div class="navbar">
-        <div class="logo" onclick="toggleSidebar()">Limbus</div>
-        <div class="menu">
-            <a href="MainPage.html">Home</a>
-            <a href="Help.html">Help</a>
-            <a href="More.html">More</a>
-            <a href="About.html">About Us</a>
-            <a href="Contact.html">Contact Us</a>
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Search...">
-        </div>
-        <div>
-            <a href="cart.html" class="cart-btn">Cart</a>
-        </div>
+<div class="navbar">
+    <div class="logo" onclick="toggleSidebar()">Limbus</div>
+    <div class="menu">
+        <a href="MainPage.html">Home</a>
+        <a href="Help.html">Help</a>
+        <a href="More.html">More</a>
+        <a href="About.html">About Us</a>
+        <a href="Contact.html">Contact Us</a>
     </div>
-
-    <div class="cart-container">
-        <div id="cart-items"></div>
-        <div class="total-price">Total: ₱<span id="total-price">0.00</span></div>
-        <a href="#" class="checkout-btn">Proceed to Checkout</a>
+    <div class="search-bar">
+        <input type="text" placeholder="Search...">
     </div>
+    <div>
+        <a href="cart.html" class="cart-btn">Cart</a>
+    </div>
+</div>
 
-    <script>
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+<div class="cart-container">
+    <div id="cart-items"></div>
+    <div class="total-price">Total: ₱<span id="total-price">0.00</span></div>
+    <a href="#" class="checkout-btn">Proceed to Checkout</a>
+</div>
 
-        function updateCart() {
-            const cartItemsContainer = document.getElementById("cart-items");
-            const totalPriceElement = document.getElementById("total-price");
-            let totalPrice = 0;
+<script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-            cartItemsContainer.innerHTML = "";
+    function updateCart() {
+        const cartItemsContainer = document.getElementById("cart-items");
+        const totalPriceElement = document.getElementById("total-price");
+        let totalPrice = 0;
+        cartItemsContainer.innerHTML = "";
 
-            cart.forEach((item, index) => {
-                totalPrice += parseFloat(item.price);
-                const cartItemElement = document.createElement("div");
-                cartItemElement.classList.add("cart-item");
-                cartItemElement.setAttribute("id", `cart-item-${index}`);
-                
-                let itemDetails = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">₱${item.price}</div>
-                        <div>Quantity: ${item.quantity}</div>
-                `;
-                
-                if (item.color) {
-                    itemDetails += `<div>Color: ${item.color}</div>`;
-                }
+        cart.forEach((item, index) => {
+            totalPrice += parseFloat(item.price);
+            const cartItemElement = document.createElement("div");
+            cartItemElement.classList.add("cart-item");
+            cartItemElement.setAttribute("id", `cart-item-${index}`);
 
-                if (item.size) {
-                    itemDetails += `<div>Size: ${item.size}</div>`;
-                }
-
-                itemDetails += `
-                    </div>
+            cartItemElement.innerHTML = `
+                <img src="${item.image}" alt="${item.name}">
+                <div class="cart-item-info">
+                    <div class="cart-item-name">${item.name}</div>
+                    <div class="cart-item-price">₱${item.price}</div>
+                    ${item.color && item.color !== "null" ? `<div>Color: ${item.color}</div>` : ""}
+                    ${item.size && item.size !== "null" ? `<div>Size: ${item.size}</div>` : ""}
+                    <div>Quantity: ${item.quantity}</div>
+                </div>
+                <div>
                     <button class="remove-item-btn" onclick="removeItem(${index})">Remove</button>
-                `;
+                    <button class="edit-item-btn" onclick="editItem(${index})">Edit</button>
+                </div>
+            `;
+            cartItemsContainer.appendChild(cartItemElement);
+        });
 
-                cartItemElement.innerHTML = itemDetails;
-                cartItemsContainer.appendChild(cartItemElement);
-            });
+        totalPriceElement.textContent = totalPrice.toFixed(2);
+    }
 
-            totalPriceElement.textContent = totalPrice.toFixed(2);
-        }
-
-        function removeItem(index) {
-            const cartItemsContainer = document.getElementById(`cart-item-${index}`);
-            
-            cartItemsContainer.style.opacity = 0;
-
-            setTimeout(() => {
-                cart.splice(index, 1);
-                localStorage.setItem("cart", JSON.stringify(cart));
-                updateCart();
-            }, 500);
-        }
-
-        window.onload = function() {
+    function removeItem(index) {
+        const cartItem = document.getElementById(`cart-item-${index}`);
+        cartItem.style.opacity = 0;
+        setTimeout(() => {
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
             updateCart();
-        };
-    </script>
+        }, 500);
+    }
+
+    function editItem(index) {
+        const item = cart[index];
+        const newColor = prompt("Enter new color:", item.color || "");
+        const newSize = prompt("Enter new size:", item.size || "");
+        const newQuantity = prompt("Enter new quantity:", item.quantity);
+
+        if (newQuantity && !isNaN(newQuantity)) {
+            cart[index].color = newColor || null;
+            cart[index].size = newSize || null;
+            cart[index].quantity = parseInt(newQuantity);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCart();
+        }
+    }
+
+    window.onload = updateCart;
+</script>
 
 </body>
 </html>
