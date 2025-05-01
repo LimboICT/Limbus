@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>███ SYSTEM FOUND ███</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: black;
+      color: red;
+      font-family: 'Courier New', Courier, monospace;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      animation: flicker 0.2s infinite;
+    }
+
+    h1 {
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px red;
+    }
+
+    p {
+      font-size: 20px;
+      max-width: 600px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .static {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('congratulations.png') center center/cover no-repeat;
+      opacity: 0.1;
+      z-index: -1;
+      mix-blend-mode: screen;
+    }
+
+    .button {
+      margin-top: 30px;
+      padding: 12px 20px;
+      background-color: transparent;
+      border: 2px solid red;
+      color: red;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .button:hover {
+      background-color: red;
+      color: black;
+    }
+
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        opacity: 1;
+      }
+      20%, 24%, 55% {
+        opacity: 0.4;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="static"></div>
+
+  <h1>YOU WEREN'T SUPPOSED TO FIND THIS.</h1>
+  <p>[WARNING] Unauthorized Access to Limbus Core Detected...</p>
+  <p>The system is watching. Don't come back here.</p>
+  <a href="Home.html" class="button">Leave Now</a>
+
+  <audio autoplay loop>
+    <source src="https://cdn.pixabay.com/audio/2023/03/27/audio_6b146e9791.mp3" type="audio/mpeg">
+  </audio>
+
+</body>
+</html>
