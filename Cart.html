@@ -68,12 +68,12 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 5px; /* Keep buttons stacked with small gap */
+            margin-top: 5px;
         }
         .remove-item-btn {
             background-color: red;
             color: white;
-            width: 100px; /* Set width for Remove button */
+            width: 100px;
         }
         .remove-item-btn:hover {
             background-color: darkred;
@@ -81,8 +81,8 @@
         .edit-item-btn {
             background-color: black;
             color: white;
-            width: 80px; /* Make the Edit button smaller */
-            margin-left: 10px; /* Move it to the right */
+            width: 80px;
+            margin-left: 10px;
         }
         .edit-item-btn:hover {
             background-color: #333;
@@ -144,13 +144,12 @@
 
             if (cart.length === 0) {
                 cartItemsContainer.innerHTML = "<p>Your cart is empty!</p>";
-                document.querySelector('.checkout-btn').style.display = 'none'; // Hide checkout button if no items
+                document.querySelector('.checkout-btn').style.display = 'none';
             } else {
-                document.querySelector('.checkout-btn').style.display = 'inline-block'; // Show checkout button if there are items
+                document.querySelector('.checkout-btn').style.display = 'inline-block';
             }
 
             cart.forEach((item, index) => {
-                // Calculate total price considering quantity
                 totalPrice += parseFloat(item.price) * item.quantity;
                 const cartItemElement = document.createElement("div");
                 cartItemElement.classList.add("cart-item");
@@ -171,7 +170,7 @@
                 cartItemsContainer.appendChild(cartItemElement);
             });
 
-            totalPriceElement.textContent = totalPrice.toFixed(2); // Display the total price
+            totalPriceElement.textContent = totalPrice.toFixed(2);
         }
 
         function removeItem(index) {
