@@ -169,12 +169,27 @@
         .login-signup-btns a:hover {
             background-color: gray;
         }
+
+        .categories-link {
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        padding: 10px 15px;
+        transition: color 0.3s, background 0.3s;
+        border-radius: 5px;
+        cursor: pointer;
+        }
+
+        .categories-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        }
+
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <div class="logo" onclick="toggleSidebar()">Limbus</div>
+        <a class="categories-link" onclick="toggleSidebar()">Categories</a>
         <div class="menu">
             <a href="Home.html">Home</a>
             <a href="Help.html">Help</a>
