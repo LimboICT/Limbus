@@ -110,6 +110,13 @@
             display: inline-block;
             margin-top: 20px;
         }
+        .btn-container {
+            margin-top: 15px;
+            text-align: left;
+        }
+        .btn-container a {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -131,7 +138,10 @@
     <div class="cart-container">
         <div id="cart-items"></div>
         <div class="total-price">Total: ₱<span id="total-price">0.00</span></div>
-        <a href="#" class="checkout-btn">Proceed to Checkout</a>
+        <div class="btn-container">
+            <a href="Home.html" class="checkout-btn">Shop for More</a>
+            <a href="#" class="checkout-btn">Proceed to Checkout</a>
+        </div>
     </div>
 
     <script>
