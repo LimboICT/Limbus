@@ -220,25 +220,20 @@
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            if (sidebar.style.left === '0px') {
-                sidebar.style.left = '-250px';
-            } else {
-                sidebar.style.left = '0px';
-            }
+            sidebar.style.left = sidebar.style.left === '0px' ? '-250px' : '0px';
         }
-
-        function viewProduct(name, price, image, hasSize = true, hasColor = true) {
-            document.body.style.opacity = 0;
-
-            setTimeout(() => {
-                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&hasSize=${hasSize}&hasColor=${hasColor}`;
-                window.location.href = url;
-            }, 500);
+        
+        function viewProduct(name, price, image, hasSize, hasColor) {
+            const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&hasSize=${hasSize}&hasColor=${hasColor}`;
+            window.location.href = url;
         }
+        
+        window.addEventListener('load', () => {
+            document.body.classList.add('fade-in');
+        });
     </script>
 
 </body>
 </html>
-
 
 
