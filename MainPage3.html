@@ -179,35 +179,35 @@
             <img src="ac1img.jpg" alt="Limbo's Leather Suspenders">
             <h3>Limbos Leather Suspenders</h3>
             <p>₱340.00</p>
-            <button onclick="viewProduct('Limbos Leather Suspenders', '340.00', 'ac1img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('Limbos Leather Suspenders', '340.00', 'ac1img.jpg', true, true)" class="view-product-btn">View Product</button>
         </div>
 
         <div class="product">
             <img src="ac2img.jpg" alt="Cross Necklace">
             <h3>Cross Necklace</h3>
             <p>₱140.00</p>
-            <button onclick="viewProduct('Cross Necklace', '140.00', 'ac2img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('Cross Necklace', '140.00', 'ac2img.jpg', false, false)" class="view-product-btn">View Product</button>
         </div>
 
         <div class="product">
             <img src="ac3img.jpg" alt="Smile Shirt Patches">
             <h3>Smile Shirt Patches</h3>
             <p>₱50.00</p>
-            <button onclick="viewProduct('Smile Shirt Patches', '50.00', 'ac3img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('Smile Shirt Patches', '50.00', 'ac3img.jpg', false, false)" class="view-product-btn">View Product</button>
         </div>
 
-      <div class="product">
+        <div class="product">
             <img src="ac4img.jpg" alt="Flame Shirt Pendant">
             <h3>Flame Shirt Pendant</h3>
             <p>₱50.00</p>
-            <button onclick="viewProduct('Flame Shirt Pendant', '50.00', 'ac4img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('Flame Shirt Pendant', '50.00', 'ac4img.jpg', false, false)" class="view-product-btn">View Product</button>
         </div>
 
-      <div class="product">
-            <img src="ac5img.jpg" alt="LIMITED EDITTION Limbos Cloak">
-            <h3>LIMITED EDITTION Limbos Cloak</h3>
+        <div class="product">
+            <img src="ac5img.jpg" alt="LIMITED EDITION Limbos Cloak">
+            <h3>LIMITED EDITION Limbos Cloak</h3>
             <p>₱999.99</p>
-            <button onclick="viewProduct('LIMITED EDITTION Limbos Cloak', '999.99', 'ac5img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('LIMITED EDITION Limbos Cloak', '999.99', 'ac5img.jpg', true, true)" class="view-product-btn">View Product</button>
         </div>
     </div>
 
@@ -226,11 +226,11 @@
             }
         }
 
-        function viewProduct(name, price, image) {
+        function viewProduct(name, price, image, hasSize = true, hasColor = true) {
             document.body.style.opacity = 0;
 
             setTimeout(() => {
-                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}`;
+                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&hasSize=${hasSize}&hasColor=${hasColor}`;
                 window.location.href = url;
             }, 500);
         }
@@ -238,3 +238,6 @@
 
 </body>
 </html>
+
+
+
