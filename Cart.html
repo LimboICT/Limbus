@@ -142,24 +142,17 @@
 
             cartItemsContainer.innerHTML = "";
 
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = "<p>Your cart is empty!</p>";
-                document.querySelector('.checkout-btn').style.display = 'none';
-            } else {
-                document.querySelector('.checkout-btn').style.display = 'inline-block';
-            }
-
             cart.forEach((item, index) => {
                 totalPrice += parseFloat(item.price) * item.quantity;
                 const cartItemElement = document.createElement("div");
                 cartItemElement.classList.add("cart-item");
                 cartItemElement.setAttribute("id", `cart-item-${index}`);
-
+                
                 cartItemElement.innerHTML = `
                     <img src="${item.image}" alt="${item.name}">
                     <div class="cart-item-info">
                         <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">₱${(parseFloat(item.price) * item.quantity).toFixed(2)}</div>
+                        <div class="cart-item-price">₱${(item.price * item.quantity).toFixed(2)}</div>
                         <div>Color: ${item.color || 'N/A'}</div>
                         <div>Size: ${item.size || 'N/A'}</div>
                         <div>Quantity: ${item.quantity}</div>
@@ -192,9 +185,8 @@
                 name: item.name,
                 price: item.price,
                 image: item.image,
-                color: item.color,
-                size: item.size,
-                quantity: item.quantity
+                hasColor: item.color ? 'true' : 'false',
+                hasSize: item.size ? 'true' : 'false'
             });
 
             window.location.href = `ProductPage.html?${queryParams.toString()}`;
