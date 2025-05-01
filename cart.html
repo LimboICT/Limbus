@@ -45,6 +45,8 @@
             margin: 10px 0;
             border-radius: 5px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            transition: opacity 0.5s ease;
         }
         .cart-item img {
             width: 80px;
@@ -147,7 +149,7 @@
                 const cartItemElement = document.createElement("div");
                 cartItemElement.classList.add("cart-item");
                 cartItemElement.setAttribute("id", `cart-item-${index}`);
-                
+
                 cartItemElement.innerHTML = `
                     <img src="${item.image}" alt="${item.name}">
                     <div class="cart-item-info">
@@ -163,12 +165,30 @@
                 cartItemsContainer.appendChild(cartItemElement);
             });
 
-            totalPriceElement.textContent = totalPrice.toFixed(2);
+            animatePrice(totalPriceElement, parseFloat(totalPriceElement.textContent), totalPrice);
+        }
+
+        function animatePrice(element, start, end) {
+            const duration = 500;
+            const frameRate = 60;
+            const totalFrames = Math.round((duration / 1000) * frameRate);
+            let frame = 0;
+
+            const counter = setInterval(() => {
+                frame++;
+                const progress = frame / totalFrames;
+                const current = start + (end - start) * progress;
+                element.textContent = current.toFixed(2);
+                if (frame === totalFrames) {
+                    clearInterval(counter);
+                    element.textContent = end.toFixed(2);
+                }
+            }, duration / totalFrames);
         }
 
         function removeItem(index) {
-            const cartItemsContainer = document.getElementById(`cart-item-${index}`);
-            cartItemsContainer.style.opacity = 0;
+            const cartItem = document.getElementById(`cart-item-${index}`);
+            cartItem.style.opacity = "0";
 
             setTimeout(() => {
                 cart.splice(index, 1);
