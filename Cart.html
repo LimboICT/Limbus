@@ -33,15 +33,6 @@
         .menu a:hover, .cart-btn:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-        .search-bar {
-            margin-left: 20px;
-        }
-        .search-bar input {
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-        }
         .cart-container {
             width: 80%;
             margin: 0 auto;
@@ -54,8 +45,6 @@
             margin: 10px 0;
             border-radius: 5px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            opacity: 1;
-            transition: opacity 0.5s ease;
         }
         .cart-item img {
             width: 80px;
@@ -76,24 +65,27 @@
         }
         .remove-item-btn, .edit-item-btn {
             padding: 8px 15px;
-            margin-top: 5px;
-            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            display: block;
+            margin-top: 5px; /* Keep buttons stacked with small gap */
         }
         .remove-item-btn {
             background-color: red;
+            color: white;
+            width: 100px; /* Set width for Remove button */
         }
         .remove-item-btn:hover {
             background-color: darkred;
         }
         .edit-item-btn {
-            background-color: #007bff;
+            background-color: black;
+            color: white;
+            width: 80px; /* Make the Edit button smaller */
+            margin-left: 10px; /* Move it to the right */
         }
         .edit-item-btn:hover {
-            background-color: #0056b3;
+            background-color: #333;
         }
         .total-price {
             margin-top: 20px;
@@ -115,100 +107,104 @@
             cursor: pointer;
             display: inline-block;
             margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-        .checkout-btn:hover {
-            background-color: gray;
         }
     </style>
 </head>
 <body>
 
-<div class="navbar">
-    <div class="logo" onclick="toggleSidebar()">Limbus</div>
-    <div class="menu">
-        <a href="MainPage.html">Home</a>
-        <a href="Help.html">Help</a>
-        <a href="More.html">More</a>
-        <a href="About.html">About Us</a>
-        <a href="Contact.html">Contact Us</a>
+    <div class="navbar">
+        <div class="logo" onclick="toggleSidebar()">Limbus</div>
+        <div class="menu">
+            <a href="MainPage.html">Home</a>
+            <a href="Help.html">Help</a>
+            <a href="More.html">More</a>
+            <a href="About.html">About Us</a>
+            <a href="Contact.html">Contact Us</a>
+        </div>
+        <div>
+            <a href="cart.html" class="cart-btn">Cart</a>
+        </div>
     </div>
-    <div class="search-bar">
-        <input type="text" placeholder="Search...">
+
+    <div class="cart-container">
+        <div id="cart-items"></div>
+        <div class="total-price">Total: ₱<span id="total-price">0.00</span></div>
+        <a href="#" class="checkout-btn">Proceed to Checkout</a>
     </div>
-    <div>
-        <a href="cart.html" class="cart-btn">Cart</a>
-    </div>
-</div>
 
-<div class="cart-container">
-    <div id="cart-items"></div>
-    <div class="total-price">Total: ₱<span id="total-price">0.00</span></div>
-    <a href="#" class="checkout-btn">Proceed to Checkout</a>
-</div>
+    <script>
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-<script>
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        function updateCart() {
+            const cartItemsContainer = document.getElementById("cart-items");
+            const totalPriceElement = document.getElementById("total-price");
+            let totalPrice = 0;
 
-    function updateCart() {
-        const cartItemsContainer = document.getElementById("cart-items");
-        const totalPriceElement = document.getElementById("total-price");
-        let totalPrice = 0;
-        cartItemsContainer.innerHTML = "";
+            cartItemsContainer.innerHTML = "";
 
-        cart.forEach((item, index) => {
-            totalPrice += parseFloat(item.price);
-            const cartItemElement = document.createElement("div");
-            cartItemElement.classList.add("cart-item");
-            cartItemElement.setAttribute("id", `cart-item-${index}`);
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = "<p>Your cart is empty!</p>";
+                document.querySelector('.checkout-btn').style.display = 'none'; // Hide checkout button if no items
+            } else {
+                document.querySelector('.checkout-btn').style.display = 'inline-block'; // Show checkout button if there are items
+            }
 
-            cartItemElement.innerHTML = `
-                <img src="${item.image}" alt="${item.name}">
-                <div class="cart-item-info">
-                    <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-price">₱${item.price}</div>
-                    ${item.color && item.color !== "null" ? `<div>Color: ${item.color}</div>` : ""}
-                    ${item.size && item.size !== "null" ? `<div>Size: ${item.size}</div>` : ""}
-                    <div>Quantity: ${item.quantity}</div>
-                </div>
-                <div>
+            cart.forEach((item, index) => {
+                // Calculate total price considering quantity
+                totalPrice += parseFloat(item.price) * item.quantity;
+                const cartItemElement = document.createElement("div");
+                cartItemElement.classList.add("cart-item");
+                cartItemElement.setAttribute("id", `cart-item-${index}`);
+
+                cartItemElement.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">₱${(parseFloat(item.price) * item.quantity).toFixed(2)}</div>
+                        <div>Color: ${item.color || 'N/A'}</div>
+                        <div>Size: ${item.size || 'N/A'}</div>
+                        <div>Quantity: ${item.quantity}</div>
+                    </div>
                     <button class="remove-item-btn" onclick="removeItem(${index})">Remove</button>
                     <button class="edit-item-btn" onclick="editItem(${index})">Edit</button>
-                </div>
-            `;
-            cartItemsContainer.appendChild(cartItemElement);
-        });
+                `;
+                cartItemsContainer.appendChild(cartItemElement);
+            });
 
-        totalPriceElement.textContent = totalPrice.toFixed(2);
-    }
-
-    function removeItem(index) {
-        const cartItem = document.getElementById(`cart-item-${index}`);
-        cartItem.style.opacity = 0;
-        setTimeout(() => {
-            cart.splice(index, 1);
-            localStorage.setItem("cart", JSON.stringify(cart));
-            updateCart();
-        }, 500);
-    }
-
-    function editItem(index) {
-        const item = cart[index];
-        const newColor = prompt("Enter new color:", item.color || "");
-        const newSize = prompt("Enter new size:", item.size || "");
-        const newQuantity = prompt("Enter new quantity:", item.quantity);
-
-        if (newQuantity && !isNaN(newQuantity)) {
-            cart[index].color = newColor || null;
-            cart[index].size = newSize || null;
-            cart[index].quantity = parseInt(newQuantity);
-            localStorage.setItem("cart", JSON.stringify(cart));
-            updateCart();
+            totalPriceElement.textContent = totalPrice.toFixed(2); // Display the total price
         }
-    }
 
-    window.onload = updateCart;
-</script>
+        function removeItem(index) {
+            const cartItemsContainer = document.getElementById(`cart-item-${index}`);
+            cartItemsContainer.style.opacity = 0;
+
+            setTimeout(() => {
+                cart.splice(index, 1);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCart();
+            }, 500);
+        }
+
+        function editItem(index) {
+            const item = cart[index];
+            const queryParams = new URLSearchParams({
+                edit: 'true',
+                index: index,
+                name: item.name,
+                price: item.price,
+                image: item.image,
+                color: item.color,
+                size: item.size,
+                quantity: item.quantity
+            });
+
+            window.location.href = `ProductPage.html?${queryParams.toString()}`;
+        }
+
+        window.onload = function() {
+            updateCart();
+        };
+    </script>
 
 </body>
 </html>
