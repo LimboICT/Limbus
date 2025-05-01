@@ -227,19 +227,16 @@
     </div>
 
     <script>
-        // Sidebar toggle
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.style.left = sidebar.style.left === '0px' ? '-250px' : '0px';
         }
-
-        // View product (no fade-out, just redirect)
+        
         function viewProduct(name, price, image, hasSize, hasColor) {
             const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&hasSize=${hasSize}&hasColor=${hasColor}`;
             window.location.href = url;
         }
-
-        // Fade-in on page load
+        
         window.addEventListener('load', () => {
             document.body.classList.add('fade-in');
         });
