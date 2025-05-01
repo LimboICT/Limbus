@@ -179,21 +179,21 @@
             <img src="co1img.jpg" alt="Limbos Slashers Keychain">
             <h3>Limbos Slashers Keychain</h3>
             <p>₱30.00</p>
-            <button onclick="viewProduct('Limbos Slashers Keychain', '30.00', 'co1img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('Limbos Slashers Keychain', '30.00', 'co1img.jpg', false, false)" class="view-product-btn">View Product</button>
         </div>
 
         <div class="product">
             <img src="co2img.jpg" alt="Limbos Double Edge Katana">
             <h3>Limbos Double Edge Katana</h3>
             <p>₱1599.99</p>
-            <button onclick="viewProduct('Limbos Double Edge Katana', '1599.99', 'co2img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('Limbos Double Edge Katana', '1599.99', 'co2img.jpg', false, false)" class="view-product-btn">View Product</button>
         </div>
 
         <div class="product">
             <img src="co3img.jpg" alt="Limbos Double Edge Keychain">
             <h3>Limbos Double Edge Keychain</h3>
             <p>₱40.00</p>
-            <button onclick="viewProduct('Limbos Double Edge Keychain', '40.00', 'co3img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('Limbos Double Edge Keychain', '40.00', 'co3img.jpg', false, false)" class="view-product-btn">View Product</button>
         </div>
     </div>
 
@@ -212,11 +212,11 @@
             }
         }
 
-        function viewProduct(name, price, image) {
+        function viewProduct(name, price, image, hasSize, hasColor) {
             document.body.style.opacity = 0;
 
             setTimeout(() => {
-                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}`;
+                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&hasSize=${hasSize}&hasColor=${hasColor}`;
                 window.location.href = url;
             }, 500);
         }
