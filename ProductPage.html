@@ -55,7 +55,6 @@
             font-size: 16px;
             box-sizing: border-box; 
         }
-
         .add-cart-btn {
             display: inline-block;
             width: 100%;
@@ -70,12 +69,10 @@
             cursor: pointer;
             transition: background 0.3s, transform 0.3s;
         }
-
         .add-cart-btn:hover {
             background-color: gray;
             transform: scale(1.05);
         }
-
         .back-btn {
             display: inline-block;
             margin-top: 20px;
@@ -84,7 +81,6 @@
             font-size: 16px;
             cursor: pointer;
         }
-
         .back-btn:hover {
             text-decoration: underline;
         }
@@ -150,11 +146,26 @@
         const image = params.get('image');
         const hasSize = params.get('hasSize') === 'true';
         const hasColor = params.get('hasColor') === 'true';
+        const editMode = params.get('edit') === 'true';
+        const itemIndex = params.get('index');
 
         if (name && price && image) {
             document.getElementById('product-name').textContent = name;
             document.getElementById('product-price').textContent = `$${price}`;
             document.getElementById('product-image').src = image;
+
+            if (editMode) {
+                const cart = JSON.parse(localStorage.getItem("cart"));
+                const currentItem = cart[itemIndex];
+                
+                if (currentItem) {
+                    document.getElementById('color').value = currentItem.color || "Black";
+                    document.getElementById('size').value = currentItem.size || "Medium";
+                    document.getElementById('quantity').value = currentItem.quantity;
+                    updatePrice(price, currentItem.quantity);
+                    document.querySelector('.add-cart-btn').textContent = 'Confirm Edit';
+                }
+            }
         } else {
             document.getElementById('product-name').textContent = "Product Not Found";
             document.getElementById('product-price').textContent = "";
@@ -169,37 +180,63 @@
             document.getElementById('size-option').style.display = 'none';
         }
 
+        function updatePrice(basePrice, quantity) {
+            const updatedPrice = basePrice * quantity;
+            document.getElementById('product-price').textContent = `$${updatedPrice.toFixed(2)}`;
+        }
+
+        document.getElementById('quantity').addEventListener('input', function() {
+            const quantity = parseInt(this.value);
+            updatePrice(parseFloat(price), quantity);
+        });
+
         function addToCart() {
-            let message = `Added to Cart:\n${name}`;
-
-            if (hasColor) {
-                const selectedColor = document.getElementById('color').value;
-                message += `\nColor: ${selectedColor}`;
-            }
-
-            if (hasSize) {
-                const selectedSize = document.getElementById('size').value;
-                message += `\nSize: ${selectedSize}`;
-            }
-
+            const selectedColor = document.getElementById('color').value;
+            const selectedSize = document.getElementById('size').value;
             const selectedQuantity = document.getElementById('quantity').value;
-            message += `\nQuantity: ${selectedQuantity}`;
-            
-            alert(message);
 
-            // Save to localStorage
-            const cartItem = {
-                name,
-                price,
-                image,
-                color: hasColor ? document.getElementById('color').value : null,
-                size: hasSize ? document.getElementById('size').value : null,
-                quantity: selectedQuantity
-            };
-            
-            const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
-            currentCart.push(cartItem);
-            localStorage.setItem("cart", JSON.stringify(currentCart));
+            if (editMode) {
+                const cart = JSON.parse(localStorage.getItem("cart"));
+                const updatedItem = {
+                    name,
+                    price,
+                    image,
+                    color: selectedColor,
+                    size: selectedSize,
+                    quantity: selectedQuantity
+                };
+                cart[itemIndex] = updatedItem;
+                localStorage.setItem("cart", JSON.stringify(cart));
+
+                alert("Item has been updated in your cart.");
+                window.location.href = "cart.html";
+            } else {
+                let message = `Added to Cart:\n${name}`;
+
+                if (hasColor) {
+                    message += `\nColor: ${selectedColor}`;
+                }
+
+                if (hasSize) {
+                    message += `\nSize: ${selectedSize}`;
+                }
+
+                message += `\nQuantity: ${selectedQuantity}`;
+                alert(message);
+
+                const cartItem = {
+                    name,
+                    price,
+                    image,
+                    color: hasColor ? selectedColor : null,
+                    size: hasSize ? selectedSize : null,
+                    quantity: selectedQuantity
+                };
+
+                const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
+                currentCart.push(cartItem);
+                localStorage.setItem("cart", JSON.stringify(currentCart));
+            }
         }
     </script>
 
