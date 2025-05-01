@@ -53,8 +53,9 @@
             border: 1px solid #ccc;
             margin-bottom: 15px;
             font-size: 16px;
-            box-sizing: border-box; 
+            box-sizing: border-box;
         }
+
         .add-cart-btn {
             display: inline-block;
             width: 100%;
@@ -69,10 +70,12 @@
             cursor: pointer;
             transition: background 0.3s, transform 0.3s;
         }
+
         .add-cart-btn:hover {
             background-color: gray;
             transform: scale(1.05);
         }
+
         .back-btn {
             display: inline-block;
             margin-top: 20px;
@@ -81,6 +84,7 @@
             font-size: 16px;
             cursor: pointer;
         }
+
         .back-btn:hover {
             text-decoration: underline;
         }
@@ -154,15 +158,30 @@
             document.getElementById('product-price').textContent = `$${price}`;
             document.getElementById('product-image').src = image;
 
-            if (editMode) {
-                const cart = JSON.parse(localStorage.getItem("cart"));
+            if (!hasColor) {
+                document.getElementById('color-option').style.display = 'none';
+            }
+
+            if (!hasSize) {
+                document.getElementById('size-option').style.display = 'none';
+            }
+
+            if (editMode && itemIndex !== null) {
+                const cart = JSON.parse(localStorage.getItem("cart")) || [];
                 const currentItem = cart[itemIndex];
-                
+
                 if (currentItem) {
-                    document.getElementById('color').value = currentItem.color || "Black";
-                    document.getElementById('size').value = currentItem.size || "Medium";
-                    document.getElementById('quantity').value = currentItem.quantity;
-                    updatePrice(price, currentItem.quantity);
+                    document.getElementById('quantity').value = currentItem.quantity || 1;
+
+                    if (hasColor && currentItem.color) {
+                        document.getElementById('color').value = currentItem.color;
+                    }
+
+                    if (hasSize && currentItem.size) {
+                        document.getElementById('size').value = currentItem.size;
+                    }
+
+                    updatePrice(parseFloat(price), currentItem.quantity);
                     document.querySelector('.add-cart-btn').textContent = 'Confirm Edit';
                 }
             }
@@ -172,20 +191,12 @@
             document.getElementById('product-image').src = "notfound.jpg";
         }
 
-        if (!hasColor) {
-            document.getElementById('color-option').style.display = 'none';
-        }
-
-        if (!hasSize) {
-            document.getElementById('size-option').style.display = 'none';
-        }
-
         function updatePrice(basePrice, quantity) {
             const updatedPrice = basePrice * quantity;
             document.getElementById('product-price').textContent = `$${updatedPrice.toFixed(2)}`;
         }
 
-        document.getElementById('quantity').addEventListener('input', function() {
+        document.getElementById('quantity').addEventListener('input', function () {
             const quantity = parseInt(this.value);
             updatePrice(parseFloat(price), quantity);
         });
@@ -201,8 +212,8 @@
                     name,
                     price,
                     image,
-                    color: selectedColor,
-                    size: selectedSize,
+                    color: hasColor ? selectedColor : null,
+                    size: hasSize ? selectedSize : null,
                     quantity: selectedQuantity
                 };
                 cart[itemIndex] = updatedItem;
@@ -212,15 +223,8 @@
                 window.location.href = "cart.html";
             } else {
                 let message = `Added to Cart:\n${name}`;
-
-                if (hasColor) {
-                    message += `\nColor: ${selectedColor}`;
-                }
-
-                if (hasSize) {
-                    message += `\nSize: ${selectedSize}`;
-                }
-
+                if (hasColor) message += `\nColor: ${selectedColor}`;
+                if (hasSize) message += `\nSize: ${selectedSize}`;
                 message += `\nQuantity: ${selectedQuantity}`;
                 alert(message);
 
