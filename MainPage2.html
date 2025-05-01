@@ -179,21 +179,21 @@
             <img src="pants1img.jpg" alt="Plain Pants">
             <h3>Plain Pants</h3>
             <p>₱200.00</p>
-            <button onclick="viewProduct('Plain Pants', '200.00', 'pants1img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('Plain Pants', '200.00', 'pants1img.jpg', true, true)" class="view-product-btn">View Product</button>
         </div>
 
         <div class="product">
             <img src="pants2img.jpg" alt="Pants with Cross Designs">
             <h3>Pants with Cross Designs</h3>
             <p>₱300.00</p>
-            <button onclick="viewProduct('Pants with Cross Designs', '300.00', 'pants2img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('Pants with Cross Designs', '300.00', 'pants2img.jpg', true, true)" class="view-product-btn">View Product</button>
         </div>
 
         <div class="product">
             <img src="pants3img.jpg" alt="Pants with Smile Designs">
             <h3>Pants with Smile Designs</h3>
             <p>₱300.00</p>
-            <button onclick="viewProduct('Pants with Smile Designs', '300.00', 'pants3img.jpg')" class="view-product-btn">View Product</button>
+            <button onclick="viewProduct('Pants with Smile Designs', '300.00', 'pants3img.jpg', true, true)" class="view-product-btn">View Product</button>
         </div>
     </div>
 
@@ -212,11 +212,11 @@
             }
         }
 
-        function viewProduct(name, price, image) {
+        function viewProduct(name, price, image, hasSize, hasColor) {
             document.body.style.opacity = 0;
 
             setTimeout(() => {
-                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}`;
+                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&hasSize=${hasSize}&hasColor=${hasColor}`;
                 window.location.href = url;
             }, 500);
         }
@@ -224,4 +224,3 @@
 
 </body>
 </html>
-
