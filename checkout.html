@@ -3,109 +3,85 @@
 <head>
     <title>Limbus - Checkout</title>
     <link rel="icon" href="limbus.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        * { box-sizing: border-box; }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            background-color: #f0f0f0;
-            padding-top: 100px;
-            box-sizing: border-box;
+            background-color: #f5f5f5;
         }
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: black;
+            background-color: #111;
             padding: 15px 30px;
             color: white;
             position: fixed;
             top: 0;
             width: 100%;
-            box-sizing: border-box;
             z-index: 1000;
         }
         .menu a, .cart-btn {
             color: white;
             text-decoration: none;
-            font-size: 16px;
             padding: 10px 15px;
-            transition: background 0.3s;
             border-radius: 5px;
+            font-size: 16px;
         }
         .menu a:hover, .cart-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.2);
         }
         .checkout-container {
-            width: 90%;
-            margin: 0 auto;
-            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            padding: 130px 5% 50px;
+            gap: 20px;
         }
-        .checkout-section {
-            margin-bottom: 20px;
+        .checkout-section, .order-summary {
+            background: white;
             padding: 20px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+        .order-summary {
+            max-width: 40%;
         }
         .checkout-title {
+            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 18px;
+            margin-bottom: 15px;
         }
         .checkout-input {
             width: 100%;
             padding: 10px;
-            margin: 5px 0;
+            margin: 10px 0;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            border: 1px solid #ddd;
         }
         .checkout-btn {
-            padding: 12px 24px;
-            background-color: black;
+            padding: 12px;
+            width: 100%;
+            background-color: #111;
             color: white;
             font-size: 16px;
             border-radius: 5px;
-            text-decoration: none;
             cursor: pointer;
-            display: inline-block;
             margin-top: 20px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .order-summary {
-            overflow: hidden;
-        }
-        #order-summary {
-            display: flex;
-            flex-direction: column;
         }
         .order-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 10px;
             margin-bottom: 10px;
+            align-items: center;
         }
         .order-item img {
-            width: 80px;
-            height: auto;
-            margin-right: 10px;
-        }
-        #order-popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        #order-popup .popup-content {
-            background: #333;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -130,31 +106,20 @@
             <input type="text" id="full-name" class="checkout-input" placeholder="Full Name" required>
             <input type="text" id="address" class="checkout-input" placeholder="Shipping Address" required>
             <input type="text" id="contact-number" class="checkout-input" placeholder="Contact Number" required>
-        </div>
 
-        <div class="checkout-section">
             <div class="checkout-title">Payment Method</div>
             <select id="payment-method" class="checkout-input">
                 <option value="cash">Cash on Delivery</option>
                 <option value="gcash">GCash</option>
             </select>
-            <input type="text" id="gcash-number" class="checkout-input" placeholder="GCash Number" style="display: none;">
+            <input type="text" id="gcash-number" class="checkout-input" placeholder="GCash Number" style="display:none;">
+
+            <button class="checkout-btn" onclick="submitOrder()">Place Order</button>
         </div>
 
-        <div class="checkout-section">
+        <div class="order-summary">
             <div class="checkout-title">Order Summary</div>
-            <div id="order-summary" class="order-summary"></div>
-        </div>
-
-        <div class="checkout-btn" onclick="submitOrder()">Place Order</div>
-    </div>
-
-    <!-- Popup -->
-    <div id="order-popup">
-        <div class="popup-content">
-            <h2>Order Confirmation</h2>
-            <p>Your order has been placed successfully!</p>
-            <button onclick="closePopup()">Close</button>
+            <div id="order-summary"></div>
         </div>
     </div>
 
@@ -188,73 +153,67 @@
             }
         });
 
-        function loadOrderSummary() {
-            const orderSummary = document.getElementById("order-summary");
-            let total = 0;
+        document.getElementById("payment-method").addEventListener("change", function () {
+            const gcashField = document.getElementById("gcash-number");
+            gcashField.style.display = this.value === "gcash" ? "block" : "none";
+        });
 
+        function loadOrderSummary() {
+            const summary = document.getElementById("order-summary");
+            summary.innerHTML = "";
+            let total = 0;
             cart.forEach(item => {
                 total += item.price * item.quantity;
-                orderSummary.innerHTML += `
+                summary.innerHTML += `
                     <div class="order-item">
                         <img src="${item.image}" alt="${item.name}">
-                        <div>${item.name} x ${item.quantity} (${item.color || ''} ${item.size || ''})</div>
-                        <div>₱${(item.price * item.quantity).toFixed(2)}</div>
+                        <div>
+                            <div><strong>${item.name}</strong></div>
+                            <div>₱${item.price} x ${item.quantity}</div>
+                            <div>Color: ${item.color || 'N/A'} | Size: ${item.size || 'N/A'}</div>
+                        </div>
                     </div>
                 `;
             });
-
-            orderSummary.innerHTML += `<div><strong>Total: ₱${total.toFixed(2)}</strong></div>`;
+            summary.innerHTML += `<hr><strong>Total: ₱${total.toFixed(2)}</strong>`;
         }
 
-        document.getElementById("payment-method").addEventListener("change", function () {
-            const gcashNumberField = document.getElementById("gcash-number");
-            gcashNumberField.style.display = this.value === "gcash" ? "block" : "none";
-        });
-
         async function submitOrder() {
-            const fullName = document.getElementById("full-name").value;
-            const address = document.getElementById("address").value;
-            const contactNumber = document.getElementById("contact-number").value;
+            const fullName = document.getElementById("full-name").value.trim();
+            const address = document.getElementById("address").value.trim();
+            const contactNumber = document.getElementById("contact-number").value.trim();
             const paymentMethod = document.getElementById("payment-method").value;
-            const gcashNumber = paymentMethod === "gcash" ? document.getElementById("gcash-number").value : null;
+            const gcashNumber = paymentMethod === "gcash" ? document.getElementById("gcash-number").value.trim() : null;
 
-            if (!fullName || !address || !contactNumber) {
-                alert("Please fill in all required fields.");
+            if (!fullName || !address || !contactNumber || (paymentMethod === "gcash" && !gcashNumber)) {
+                Swal.fire("Please complete all required fields.");
                 return;
             }
 
             const orderData = {
-                items: cart,
-                total: cart.reduce((acc, item) => acc + (item.price * item.quantity), 0),
-                shipping: {
-                    fullName,
-                    address,
-                    contactNumber
-                },
+                userId: user.uid,
+                shipping: { fullName, address, contactNumber },
                 paymentMethod,
                 gcashNumber,
-                userId: user.uid,
+                items: cart,
+                total: cart.reduce((acc, item) => acc + (item.price * item.quantity), 0),
                 createdAt: serverTimestamp()
             };
 
             try {
                 await addDoc(collection(db, "orders"), orderData);
-                showPopup();
-                localStorage.removeItem("cart");
-                setTimeout(() => {
+                Swal.fire({
+                    title: "Order Placed!",
+                    icon: "success",
+                    confirmButtonText: "OK"
+                }).then(() => {
+                    localStorage.removeItem("cart");
                     window.location.href = "order-confirmation.html";
-                }, 2000);
-            } catch (e) {
-                alert("Error placing order: " + e.message);
+                });
+            } catch (err) {
+                Swal.fire("Failed to place order. Try again later.");
+                console.error(err);
             }
-        }
-
-        function showPopup() {
-            document.getElementById("order-popup").style.display = "flex";
-        }
-
-        function closePopup() {
-            document.getElementById("order-popup").style.display = "none";
         }
     </script>
 </body>
