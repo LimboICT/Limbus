@@ -10,6 +10,7 @@
             background-color: #f7f7f7;
             padding-top: 80px;
             padding-bottom: 50px;
+            overflow-x: hidden; /* Prevent horizontal overflow */
         }
 
         .navbar {
@@ -42,9 +43,10 @@
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding-top: 80px;
+            padding-top: 100px; /* Add padding to avoid overlap with navbar */
             padding-left: 20px;
             padding-right: 20px;
+            box-sizing: border-box;
         }
 
         .checkout-section {
@@ -53,6 +55,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             padding: 25px;
+            box-sizing: border-box;
         }
 
         .checkout-title {
@@ -69,6 +72,7 @@
             border-radius: 8px;
             border: 1px solid #ddd;
             font-size: 16px;
+            box-sizing: border-box;
         }
 
         .checkout-input:focus {
@@ -139,6 +143,11 @@
             .checkout-container {
                 padding-left: 10px;
                 padding-right: 10px;
+            }
+
+            .checkout-btn {
+                width: auto;
+                margin-top: 10px;
             }
         }
 
