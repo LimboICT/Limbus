@@ -82,18 +82,36 @@
         .order-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
         }
         .order-item img {
             width: 80px;
             height: auto;
+            margin-right: 10px;
+        }
+        #order-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        #order-popup .popup-content {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-
     <div class="navbar">
-        <div class="logo" onclick="toggleSidebar()">Limbus</div>
+        <div class="logo">Limbus</div>
         <div class="menu">
             <a href="Home.html">Home</a>
             <a href="Help.html">Help</a>
@@ -131,6 +149,15 @@
         <div class="checkout-btn" onclick="submitOrder()">Place Order</div>
     </div>
 
+    <!-- Popup -->
+    <div id="order-popup">
+        <div class="popup-content">
+            <h2>Order Confirmation</h2>
+            <p>Your order has been placed successfully!</p>
+            <button onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -140,7 +167,7 @@
             apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
             authDomain: "login-1d138.firebaseapp.com",
             projectId: "login-1d138",
-            storageBucket: "login-1d138.firebasestorage.app",
+            storageBucket: "login-1d138.appspot.com",
             messagingSenderId: "823918375870",
             appId: "1:823918375870:web:13db570de493498df33fef"
         };
@@ -170,22 +197,18 @@
                 orderSummary.innerHTML += `
                     <div class="order-item">
                         <img src="${item.image}" alt="${item.name}">
-                        <div>${item.name} x ${item.quantity}</div>
+                        <div>${item.name} x ${item.quantity} (${item.color || ''} ${item.size || ''})</div>
                         <div>₱${(item.price * item.quantity).toFixed(2)}</div>
                     </div>
                 `;
             });
 
-            orderSummary.innerHTML += `<div>Total: ₱${total.toFixed(2)}</div>`;
+            orderSummary.innerHTML += `<div><strong>Total: ₱${total.toFixed(2)}</strong></div>`;
         }
 
         document.getElementById("payment-method").addEventListener("change", function () {
             const gcashNumberField = document.getElementById("gcash-number");
-            if (this.value === "gcash") {
-                gcashNumberField.style.display = "block";
-            } else {
-                gcashNumberField.style.display = "none";
-            }
+            gcashNumberField.style.display = this.value === "gcash" ? "block" : "none";
         });
 
         async function submitOrder() {
@@ -194,6 +217,11 @@
             const contactNumber = document.getElementById("contact-number").value;
             const paymentMethod = document.getElementById("payment-method").value;
             const gcashNumber = paymentMethod === "gcash" ? document.getElementById("gcash-number").value : null;
+
+            if (!fullName || !address || !contactNumber) {
+                alert("Please fill in all required fields.");
+                return;
+            }
 
             const orderData = {
                 items: cart,
@@ -211,13 +239,22 @@
 
             try {
                 await addDoc(collection(db, "orders"), orderData);
-                alert("Order placed successfully!");
+                showPopup();
                 localStorage.removeItem("cart");
-                window.location.href = "order-confirmation.html";
-            } catch (error) {
-                console.error("Error submitting order: ", error);
-                alert("Failed to place order. Please try again.");
+                setTimeout(() => {
+                    window.location.href = "order-confirmation.html";
+                }, 2000);
+            } catch (e) {
+                alert("Error placing order: " + e.message);
             }
+        }
+
+        function showPopup() {
+            document.getElementById("order-popup").style.display = "flex";
+        }
+
+        function closePopup() {
+            document.getElementById("order-popup").style.display = "none";
         }
     </script>
 </body>
