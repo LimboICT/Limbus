@@ -182,8 +182,9 @@
 
         function fadeOutAndGoBack() {
             document.body.style.opacity = 0;
-            setTimeout(() => history.back(), 500);
+            setTimeout(() => window.location.href = "Home.html", 500);
         }
+
 
         const params = new URLSearchParams(window.location.search);
         const name = params.get('name');
