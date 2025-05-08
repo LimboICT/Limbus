@@ -48,6 +48,8 @@
         }
         .order-summary {
             max-width: 40%;
+            max-height: 70vh;
+            overflow-y: auto;
         }
         .checkout-title {
             font-size: 20px;
@@ -114,7 +116,7 @@
             </select>
             <input type="text" id="gcash-number" class="checkout-input" placeholder="GCash Number" style="display:none;">
 
-            <button class="checkout-btn" onclick="submitOrder()">Place Order</button>
+            <button class="checkout-btn" id="place-order-btn">Place Order</button>
         </div>
 
         <div class="order-summary">
@@ -149,18 +151,29 @@
                 user = currentUser;
                 loadOrderSummary();
             } else {
-                window.location.href = "Login.html";
+                window.location.href = "Login.html?redirect=checkout";
             }
         });
 
-        document.getElementById("payment-method").addEventListener("change", function () {
+        document.getElementById("payment-method").addEventListener("change", function() {
             const gcashField = document.getElementById("gcash-number");
-            gcashField.style.display = this.value === "gcash" ? "block" : "none";
+            if (this.value === "gcash") {
+                gcashField.style.display = "block";
+            } else {
+                gcashField.style.display = "none";
+                gcashField.value = "";
+            }
         });
 
         function loadOrderSummary() {
             const summary = document.getElementById("order-summary");
             summary.innerHTML = "";
+            
+            if (cart.length === 0) {
+                summary.innerHTML = "<p>Your cart is empty.</p>";
+                return;
+            }
+
             let total = 0;
             cart.forEach(item => {
                 total += item.price * item.quantity;
@@ -178,15 +191,21 @@
             summary.innerHTML += `<hr><strong>Total: ₱${total.toFixed(2)}</strong>`;
         }
 
-        async function submitOrder() {
+        document.getElementById("place-order-btn").addEventListener("click", async function() {
             const fullName = document.getElementById("full-name").value.trim();
             const address = document.getElementById("address").value.trim();
             const contactNumber = document.getElementById("contact-number").value.trim();
             const paymentMethod = document.getElementById("payment-method").value;
             const gcashNumber = paymentMethod === "gcash" ? document.getElementById("gcash-number").value.trim() : null;
 
-            if (!fullName || !address || !contactNumber || (paymentMethod === "gcash" && !gcashNumber)) {
+            if (!fullName || !address || !contactNumber) {
                 Swal.fire("Please complete all required fields.");
+                return;
+            }
+
+            if (paymentMethod === "gcash" && !gcashNumber) {
+                document.getElementById("gcash-number").style.border = "1px solid red";
+                Swal.fire("Please enter your GCash number.");
                 return;
             }
 
@@ -208,13 +227,13 @@
                     confirmButtonText: "OK"
                 }).then(() => {
                     localStorage.removeItem("cart");
-                    window.location.href = "Home.html"; 
+                    window.location.href = "Orders.html";
                 });
             } catch (err) {
                 Swal.fire("Failed to place order. Try again later.");
                 console.error(err);
             }
-        }
+        });
     </script>
 </body>
 </html>
