@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Limbus - More</title>
+    <title>Limbus - Pants</title>
+    <link rel="icon" href="limbus.png" type="image/png">
+    <script type="module" src="path/to/your/js/yourScript.js"></script>
     <style>
         body {
             margin: 0;
@@ -9,7 +11,7 @@
             background-color: #f0f0f0;
         }
         body {
-	    user-select: none;
+            user-select: none;
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -86,7 +88,7 @@
             font-size: 18px;
             color: gray;
         }
-	 .logo img {
+        .logo img {
             height: 40px;
             width: auto;
         }
@@ -104,12 +106,14 @@
             <a href="About.html">About Us</a>
             <a href="Contact.html">Contact Us</a>
         </div>
-		<div class="search-bar">
+        <div class="search-bar">
             <input type="text" placeholder="Search...">
+            <span id="user-welcome" style="display: none; margin-left: 10px; color: white;"></span>
         </div>
         <div class="user-options">
-            <a href="Login.html">Log In</a>
-            <a href="Signup.html">Sign Up</a>
+            <a href="Login.html" id="login-btn">Log In</a>
+            <a href="Signup.html" id="signup-btn">Sign Up</a>
+            <a href="#" id="logout-btn" style="display: none;">Log Out</a>
         </div>
     </div>
     <div class="more-container">
@@ -117,21 +121,8 @@
         <p>???</p>
         <p>Stay tuned for updates and new arrivals!</p>
     </div>
-	
-	<script>
-  	document.addEventListener("contextmenu", function (event) {
-   	 event.preventDefault();
- 	 });
-	document.addEventListener("copy", function (event) {
-	    event.preventDefault();
-    	alert("Copying is disabled on this website.");
-  	});
-	document.addEventListener("keydown", function (event) {
-    	if ((event.ctrlKey && event.key === "c") || (event.metaKey && event.key === "c")) {
-      	event.preventDefault();
-      	alert("Copying is disabled.");
-    	}
- 	 });
-	</script>
+    <script src="https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js"></script>
+    <script type="module" src="path/to/your/script.js"></script>
 </body>
 </html>
