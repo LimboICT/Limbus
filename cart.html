@@ -102,28 +102,96 @@
         }
         .checkout-btn {
             padding: 12px 24px;
-            background-color: black;
-            color: white;
             font-size: 16px;
             border-radius: 5px;
             text-decoration: none;
-            cursor: pointer;
             display: inline-block;
             margin-top: 20px;
+            margin-right: 10px;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+        .checkout-btn.enabled {
+            background-color: black;
+            color: white;
+            cursor: pointer;
+        }
+        .checkout-btn.disabled {
+            background-color: #ccc;
+            color: #666;
+            pointer-events: none;
+        }
+        .empty-cart-message {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: #777;
+            margin-top: 30px;
         }
         .btn-container {
             margin-top: 15px;
             text-align: left;
         }
-        .btn-container a {
-            margin-right: 10px;
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-backdrop.show .modal {
+            transform: scale(1);
+        }
+
+        .modal button {
+            padding: 10px 20px;
+            margin: 15px 10px 0 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .modal .yes-btn {
+            background-color: red;
+            color: white;
+        }
+
+        .modal .no-btn {
+            background-color: #ccc;
+            color: #000;
         }
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <div class="logo" onclick="toggleSidebar()">Limbus</div>
+        <div class="logo">Limbus</div>
         <div class="menu">
             <a href="Home.html">Home</a>
             <a href="Help.html">Help</a>
@@ -138,29 +206,50 @@
 
     <div class="cart-container">
         <div id="cart-items"></div>
+        <div class="empty-cart-message" id="empty-message" style="display: none;">Your cart is empty.</div>
         <div class="total-price">Total: ₱<span id="total-price">0.00</span></div>
         <div class="btn-container">
-            <a href="Home.html" class="checkout-btn">Shop for More</a>
-            <a href="#" class="checkout-btn">Proceed to Checkout</a>
+            <a href="Home.html" class="checkout-btn enabled">Shop for More</a>
+            <a href="#" id="checkout-btn" class="checkout-btn disabled">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="modal">
+        <div class="modal">
+            <p>Are you sure you want to remove this item?</p>
+            <button class="yes-btn" onclick="confirmRemove()">Yes</button>
+            <button class="no-btn" onclick="closeModal()">No</button>
         </div>
     </div>
 
     <script>
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let itemToRemoveIndex = null;
 
         function updateCart() {
             const cartItemsContainer = document.getElementById("cart-items");
             const totalPriceElement = document.getElementById("total-price");
-            let totalPrice = 0;
+            const emptyMessage = document.getElementById("empty-message");
+            const checkoutBtn = document.getElementById("checkout-btn");
 
+            let totalPrice = 0;
             cartItemsContainer.innerHTML = "";
+
+            if (cart.length === 0) {
+                emptyMessage.style.display = "block";
+                checkoutBtn.classList.remove("enabled");
+                checkoutBtn.classList.add("disabled");
+            } else {
+                emptyMessage.style.display = "none";
+                checkoutBtn.classList.remove("disabled");
+                checkoutBtn.classList.add("enabled");
+            }
 
             cart.forEach((item, index) => {
                 totalPrice += parseFloat(item.price) * item.quantity;
                 const cartItemElement = document.createElement("div");
                 cartItemElement.classList.add("cart-item");
                 cartItemElement.setAttribute("id", `cart-item-${index}`);
-
                 cartItemElement.innerHTML = `
                     <img src="${item.image}" alt="${item.name}">
                     <div class="cart-item-info">
@@ -170,7 +259,7 @@
                         <div>Size: ${item.size || 'N/A'}</div>
                         <div>Quantity: ${item.quantity}</div>
                     </div>
-                    <button class="remove-item-btn" onclick="removeItem(${index})">Remove</button>
+                    <button class="remove-item-btn" onclick="openModal(${index})">Remove</button>
                     <button class="edit-item-btn" onclick="editItem(${index})">Edit</button>
                 `;
                 cartItemsContainer.appendChild(cartItemElement);
@@ -184,7 +273,6 @@
             const frameRate = 60;
             const totalFrames = Math.round((duration / 1000) * frameRate);
             let frame = 0;
-
             const counter = setInterval(() => {
                 frame++;
                 const progress = frame / totalFrames;
@@ -197,15 +285,23 @@
             }, duration / totalFrames);
         }
 
-        function removeItem(index) {
-            const cartItem = document.getElementById(`cart-item-${index}`);
-            cartItem.style.opacity = "0";
+        function openModal(index) {
+            itemToRemoveIndex = index;
+            document.getElementById("modal").classList.add("show");
+        }
 
-            setTimeout(() => {
-                cart.splice(index, 1);
+        function closeModal() {
+            itemToRemoveIndex = null;
+            document.getElementById("modal").classList.remove("show");
+        }
+
+        function confirmRemove() {
+            if (itemToRemoveIndex !== null) {
+                cart.splice(itemToRemoveIndex, 1);
                 localStorage.setItem("cart", JSON.stringify(cart));
                 updateCart();
-            }, 500);
+                closeModal();
+            }
         }
 
         function editItem(index) {
@@ -219,14 +315,10 @@
                 hasColor: item.color ? 'true' : 'false',
                 hasSize: item.size ? 'true' : 'false'
             });
-
             window.location.href = `ProductPage.html?${queryParams.toString()}`;
         }
 
-        window.onload = function() {
-            updateCart();
-        };
+        window.onload = updateCart;
     </script>
-
 </body>
 </html>
