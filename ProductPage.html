@@ -239,14 +239,15 @@
         const colorSelect = document.getElementById('color');
         colorSelect.addEventListener('change', function () {
             const selectedColor = colorSelect.value;
-            if (selectedColor === color1) {
+            if (selectedColor === "Black" && color1Image) {
                 document.getElementById('product-image').src = color1Image;
-            } else if (selectedColor === color2) {
+            } else if (selectedColor === "White" && color2Image) {
                 document.getElementById('product-image').src = color2Image;
-            } else if (selectedColor === color3) {
+            } else if (selectedColor === "Gray" && color3Image) {
                 document.getElementById('product-image').src = color3Image;
             }
         });
+
 
         function showSuccessPopup(message) {
             const popup = document.getElementById("success-popup");
