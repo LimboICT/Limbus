@@ -28,7 +28,8 @@ document.getElementById("signup-button").addEventListener("click", () => {
       const user = userCredential.user;
       console.log("User created:", user);
       alert("Sign-up successful!");
-      window.location.href = "Login.html";
+      window.location.href = "Login.html"; 
+    })
     .catch((error) => {
       console.error("Sign-up error:", error.message);
       alert("Error: " + error.message);
