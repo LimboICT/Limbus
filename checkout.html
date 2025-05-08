@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Limbus - Checkout</title>
+    <link rel="icon" href="limbus.png" type="image/png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+            padding-top: 100px;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: black;
+            padding: 15px 30px;
+            color: white;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+        .menu a, .cart-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            transition: background 0.3s;
+            border-radius: 5px;
+        }
+        .menu a:hover, .cart-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .checkout-container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        .checkout-section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .checkout-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .checkout-input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .checkout-btn {
+            padding: 12px 24px;
+            background-color: black;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo" onclick="toggleSidebar()">Limbus</div>
+        <div class="menu">
+            <a href="Home.html">Home</a>
+            <a href="Help.html">Help</a>
+            <a href="More.html">More</a>
+            <a href="About.html">About Us</a>
+            <a href="Contact.html">Contact Us</a>
+        </div>
+        <div>
+            <a href="cart.html" class="cart-btn">Cart</a>
+        </div>
+    </div>
+
+    <div class="checkout-container">
+        <div class="checkout-section">
+            <div class="checkout-title">Shipping Information</div>
+            <input type="text" id="full-name" class="checkout-input" placeholder="Full Name" required>
+            <input type="text" id="address" class="checkout-input" placeholder="Shipping Address" required>
+            <input type="text" id="contact-number" class="checkout-input" placeholder="Contact Number" required>
+        </div>
+
+        <div class="checkout-section">
+            <div class="checkout-title">Payment Method</div>
+            <select id="payment-method" class="checkout-input">
+                <option value="cash">Cash on Delivery</option>
+                <option value="gcash">GCash</option>
+            </select>
+            <input type="text" id="gcash-number" class="checkout-input" placeholder="GCash Number" style="display: none;">
+        </div>
+
+        <div class="checkout-section">
+            <div class="checkout-title">Order Summary</div>
+            <div id="order-summary"></div>
+            <div class="checkout-btn" onclick="submitOrder()">Place Order</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+			    apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
+			    authDomain: "login-1d138.firebaseapp.com",
+			    projectId: "login-1d138",
+			    storageBucket: "login-1d138.firebasestorage.app",
+			    messagingSenderId: "823918375870",
+			    appId: "1:823918375870:web:13db570de493498df33fef"
+		    };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let user = null;
+
+        onAuthStateChanged(auth, (currentUser) => {
+            if (currentUser) {
+                user = currentUser;
+                loadOrderSummary();
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        function loadOrderSummary() {
+            const orderSummary = document.getElementById("order-summary");
+            let total = 0;
+
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                orderSummary.innerHTML += `
+                    <div>${item.name} - ₱${item.price} x ${item.quantity}</div>
+                `;
+            });
+
+            orderSummary.innerHTML += `<div>Total: ₱${total.toFixed(2)}</div>`;
+        }
+
+        document.getElementById("payment-method").addEventListener("change", function () {
+            const gcashNumberField = document.getElementById("gcash-number");
+            if (this.value === "gcash") {
+                gcashNumberField.style.display = "block";
+            } else {
+                gcashNumberField.style.display = "none";
+            }
+        });
+
+        async function submitOrder() {
+            const fullName = document.getElementById("full-name").value;
+            const address = document.getElementById("address").value;
+            const contactNumber = document.getElementById("contact-number").value;
+            const paymentMethod = document.getElementById("payment-method").value;
+            const gcashNumber = paymentMethod === "gcash" ? document.getElementById("gcash-number").value : null;
+
+            const orderData = {
+                items: cart,
+                total: cart.reduce((acc, item) => acc + (item.price * item.quantity), 0),
+                shipping: {
+                    fullName,
+                    address,
+                    contactNumber
+                },
+                paymentMethod,
+                gcashNumber,
+                userId: user.uid,
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "orders"), orderData);
+                alert("Order placed successfully!");
+                localStorage.removeItem("cart");
+                window.location.href = "order-confirmation.html";
+            } catch (error) {
+                console.error("Error submitting order: ", error);
+                alert("Failed to place order. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>
