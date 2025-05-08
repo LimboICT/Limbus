@@ -14,7 +14,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+// Debugging: log to check if the event listener is being set
 document.getElementById("signup-button").addEventListener("click", () => {
+  console.log("Signup button clicked!");
+
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
@@ -28,7 +31,7 @@ document.getElementById("signup-button").addEventListener("click", () => {
       const user = userCredential.user;
       console.log("User created:", user);
       alert("Sign-up successful!");
-      window.location.href = "Login.html"; 
+      window.location.href = "Login.html";  // Redirect to login after sign-up
     })
     .catch((error) => {
       console.error("Sign-up error:", error.message);
