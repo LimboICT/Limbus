@@ -215,24 +215,68 @@
     </div>
 
     <div class="login-signup-btns">
-        <a href="Login.html">Log In</a>
-        <a href="Signup.html">Sign Up</a>
-    </div>
+    <a href="Login.html" id="login-btn">Log In</a>
+    <a href="Signup.html" id="signup-btn">Sign Up</a>
+    <a href="#" id="logout-btn" style="display: none;">Log Out</a>
+  </div>
 
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.style.left = sidebar.style.left === '0px' ? '-250px' : '0px';
-        }
+<script type="module" src="firebaseAuth.js"></script>
+
+  <script>
+    const auth = firebase.auth();
+
+    function checkUserAuth() {
+      firebase.auth().onAuthStateChanged((user) => {
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userWelcome = document.getElementById('user-welcome');
         
-        function viewProduct(name, price, image, hasSize, hasColor) {
-            const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&hasSize=${hasSize}&hasColor=${hasColor}`;
-            window.location.href = url;
+        if (user) {
+          loginBtn.style.display = 'none';
+          signupBtn.style.display = 'none';
+          logoutBtn.style.display = 'inline-block';
+          userWelcome.style.display = 'inline-block';
+          userWelcome.innerText = `Welcome, ${user.displayName || 'User'}`;
+        } else {
+          loginBtn.style.display = 'inline-block';
+          signupBtn.style.display = 'inline-block';
+          logoutBtn.style.display = 'none';
+          userWelcome.style.display = 'none';
         }
-        
-        window.addEventListener('load', () => {
-            document.body.classList.add('fade-in');
+      });
+    }
+
+    function handleLogout() {
+      const logoutBtn = document.getElementById('logout-btn');
+      logoutBtn.addEventListener('click', () => {
+        firebase.auth().signOut().then(() => {
+          location.reload();
+        }).catch((error) => {
+          console.error('Error logging out:', error.message);
         });
+      });
+    }
+
+    window.onload = function() {
+      checkUserAuth();
+      handleLogout();
+    };
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.style.left = sidebar.style.left === '0px' || sidebar.style.left === '' ? '-250px' : '0px';
+    }
+
+        
+    function viewProduct(name, price, image, hasSize, hasColor) {
+        const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&hasSize=${hasSize}&hasColor=${hasColor}`;
+        window.location.href = url;
+    }
+        
+    window.addEventListener('load', () => {
+        document.body.classList.add('fade-in');
+    });
     </script>
 
 </body>
