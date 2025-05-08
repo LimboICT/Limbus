@@ -5,14 +5,12 @@
     <link rel="icon" href="limbus.png" type="image/png">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
-            background-color: #f7f7f7;
-            padding-top: 80px;
-            padding-bottom: 50px;
-            overflow-x: hidden; /* Prevent horizontal overflow */
+            background-color: #f0f0f0;
+            padding-top: 100px;
+            box-sizing: border-box;
         }
-
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -23,186 +21,73 @@
             position: fixed;
             top: 0;
             width: 100%;
+            box-sizing: border-box;
             z-index: 1000;
         }
-
         .menu a, .cart-btn {
             color: white;
             text-decoration: none;
             font-size: 16px;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 10px 15px;
             transition: background 0.3s;
+            border-radius: 5px;
         }
-
         .menu a:hover, .cart-btn:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-
         .checkout-container {
-            width: 100%;
-            max-width: 1200px;
+            width: 90%;
             margin: 0 auto;
-            padding-top: 100px; /* Add padding to avoid overlap with navbar */
-            padding-left: 20px;
-            padding-right: 20px;
-            box-sizing: border-box;
+            padding: 20px;
         }
-
         .checkout-section {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-            padding: 25px;
-            box-sizing: border-box;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         .checkout-title {
-            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
         }
-
         .checkout-input {
             width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
             border: 1px solid #ddd;
+        }
+        .checkout-btn {
+            padding: 12px 24px;
+            background-color: black;
+            color: white;
             font-size: 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 20px;
+            width: 100%;
             box-sizing: border-box;
         }
-
-        .checkout-input:focus {
-            outline: none;
-            border-color: #333;
-        }
-
-        .checkout-btn {
-            padding: 14px 28px;
-            background-color: black;
-            color: white;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 20px;
-            display: inline-block;
-            width: 100%;
-            text-align: center;
-            transition: background 0.3s;
-        }
-
-        .checkout-btn:hover {
-            background-color: #444;
-        }
-
         .order-summary {
-            padding-top: 10px;
-            font-size: 16px;
+            overflow: hidden;
         }
-
-        .order-summary div {
-            margin-bottom: 8px;
+        #order-summary {
+            display: flex;
+            flex-direction: column;
         }
-
-        .order-summary .total {
-            font-weight: bold;
-            font-size: 18px;
-            color: #333;
-        }
-
         .order-item {
             display: flex;
-            align-items: center;
-            margin-bottom: 12px;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
-
         .order-item img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            margin-right: 15px;
+            width: 80px;
+            height: auto;
         }
-
-        .order-item-details {
-            flex: 1;
-        }
-
-        .order-item-price {
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        #gcash-number {
-            display: none;
-        }
-
-        @media screen and (max-width: 768px) {
-            .checkout-container {
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-
-            .checkout-btn {
-                width: auto;
-                margin-top: 10px;
-            }
-        }
-
-        /* Popup Modal */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            z-index: 1001; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 400px;
-            border-radius: 8px;
-        }
-
-        .modal-header {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .modal-body {
-            margin-top: 10px;
-            font-size: 16px;
-        }
-
-        .modal-footer {
-            text-align: right;
-            margin-top: 20px;
-        }
-
-        .modal-footer .close-btn {
-            padding: 10px 20px;
-            background-color: black;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-
-        .modal-footer .close-btn:hover {
-            background-color: #444;
-        }
-
     </style>
 </head>
 <body>
@@ -243,24 +128,7 @@
             <div id="order-summary" class="order-summary"></div>
         </div>
 
-        <div class="checkout-section">
-            <div class="checkout-btn" onclick="submitOrder()">Place Order</div>
-        </div>
-    </div>
-
-    <!-- Modal for Order Success/Failure -->
-    <div id="order-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                Order Status
-            </div>
-            <div id="modal-body" class="modal-body">
-                <!-- Order success/failure message will appear here -->
-            </div>
-            <div class="modal-footer">
-                <button class="close-btn" onclick="closeModal()">Close</button>
-            </div>
-        </div>
+        <div class="checkout-btn" onclick="submitOrder()">Place Order</div>
     </div>
 
     <script type="module">
@@ -302,15 +170,13 @@
                 orderSummary.innerHTML += `
                     <div class="order-item">
                         <img src="${item.image}" alt="${item.name}">
-                        <div class="order-item-details">
-                            <div>${item.name} - ${item.color || 'No color'} - ${item.size || 'No size'} - x${item.quantity}</div>
-                            <div class="order-item-price">₱${(item.price * item.quantity).toFixed(2)}</div>
-                        </div>
+                        <div>${item.name} x ${item.quantity}</div>
+                        <div>₱${(item.price * item.quantity).toFixed(2)}</div>
                     </div>
                 `;
             });
 
-            orderSummary.innerHTML += `<div class="total">Total: ₱${total.toFixed(2)}</div>`;
+            orderSummary.innerHTML += `<div>Total: ₱${total.toFixed(2)}</div>`;
         }
 
         document.getElementById("payment-method").addEventListener("change", function () {
@@ -345,31 +211,13 @@
 
             try {
                 await addDoc(collection(db, "orders"), orderData);
-                showModal("Order placed successfully!", "success");
+                alert("Order placed successfully!");
                 localStorage.removeItem("cart");
-                setTimeout(() => window.location.href = "order-confirmation.html", 3000);
+                window.location.href = "order-confirmation.html";
             } catch (error) {
-                showModal("Failed to place order. Please try again.", "error");
+                console.error("Error submitting order: ", error);
+                alert("Failed to place order. Please try again.");
             }
-        }
-
-        function showModal(message, status) {
-            const modal = document.getElementById("order-modal");
-            const modalBody = document.getElementById("modal-body");
-
-            modalBody.innerHTML = message;
-            modal.style.display = "block";
-
-            if (status === "success") {
-                modalBody.style.color = "green";
-            } else {
-                modalBody.style.color = "red";
-            }
-        }
-
-        function closeModal() {
-            const modal = document.getElementById("order-modal");
-            modal.style.display = "none";
         }
     </script>
 </body>
