@@ -241,7 +241,14 @@
     <a href="Signup.html">Sign Up</a>
   </div>
 
+ <script src="firebaseAuth.js"></script>
+
   <script>
+    window.onload = function() {
+      checkUserAuth(); 
+      startImageSlider(); 
+    };
+
     function startImageSlider() {
       const categoryImages = document.querySelectorAll('.category-image');
       
