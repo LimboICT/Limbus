@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Limbus - Tshirt</title>
+    <title>Limbus - Pants</title>
+    <link rel="icon" href="limbus.png" type="image/png">
     <style>
         body {
             user-select: none;
@@ -115,7 +116,7 @@
             width: 250px;
             position: fixed;
             top: 0;
-            left: -250px;
+            left: -250px; /* Initially hidden */
             background-color: black;
             color: white;
             overflow-x: hidden;
@@ -255,7 +256,7 @@
           signupBtn.style.display = 'none';
           logoutBtn.style.display = 'inline-block';
           userWelcome.style.display = 'inline-block';
-          userWelcome.innerText = Welcome, ${user.displayName || 'User'};
+          userWelcome.innerText = `Welcome, ${user.displayName || 'User'}`;
         } else {
           loginBtn.style.display = 'inline-block';
           signupBtn.style.display = 'inline-block';
@@ -278,27 +279,23 @@
 
     window.onload = function() {
       checkUserAuth();
-      startImageSlider();
       handleLogout();
     };
-	function toggleSidebar() {
-		const sidebar = document.getElementById('sidebar');
-		sidebar.style.left = sidebar.style.left === '0px' ? '-250px' : '0px';
-	}
 
-	function viewProduct(name, price, image, color1, color1Image, color2, color2Image, color3, color3Image) {
-		document.body.style.opacity = 0;
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.style.left = sidebar.style.left === '0px' || sidebar.style.left === '' ? '-250px' : '0px';
+    }
+    
+    function viewProduct(name, price, image, color1, color1Image, color2, color2Image, color3, color3Image) {
+        document.body.style.opacity = 0;
 
-		setTimeout(() => {
-			const url = ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&color1=${encodeURIComponent(color1)}&color1Image=${encodeURIComponent(color1Image)}&color2=${encodeURIComponent(color2)}&color2Image=${encodeURIComponent(color2Image)}&color3=${encodeURIComponent(color3)}&color3Image=${encodeURIComponent(color3Image)}&hasColor=true&hasSize=true;
-			window.location.href = url;
-		}, 500);
-	}
-        
-        window.addEventListener('load', () => {
-            document.body.classList.add('fade-in');
-        });
-    </script>
+        setTimeout(() => {
+            const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&color1=${encodeURIComponent(color1)}&color1Image=${encodeURIComponent(color1Image)}&color2=${encodeURIComponent(color2)}&color2Image=${encodeURIComponent(color2Image)}&color3=${encodeURIComponent(color3)}&color3Image=${encodeURIComponent(color3Image)}&hasColor=true&hasSize=true`;
+            window.location.href = url;
+        }, 500);
+    }
+  </script>
 
 </body>
 </html>
