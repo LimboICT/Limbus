@@ -3,6 +3,8 @@
 <head>
     <title>Limbus - Contact</title>
     <link rel="icon" href="limbus.png" type="image/png">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <style>
         body {
             margin: 0;
@@ -15,7 +17,7 @@
             min-height: 100vh;
         }
         body {
-	    user-select: none;
+            user-select: none;
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -122,7 +124,7 @@
         .contact-form button:hover {
             background-color: #333;
         }
-	.logo img {
+        .logo img {
             height: 40px;
             width: auto;
         }
@@ -140,34 +142,84 @@
             <a href="About.html">About Us</a>
             <a href="Contact.html">Contact Us</a>
         </div>
-		<div class="search-bar">
+        <div class="search-bar">
             <input type="text" placeholder="Search...">
         </div>
     </div>
     <div class="contact-container">
         <h1>Contact Us</h1>
         <p>Have any questions? Feel free to reach out! We will get back to you as soon as possible.</p>
-        <form class="contact-form">
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea placeholder="Your Message" rows="5" required></textarea>
+        <form class="contact-form" id="contactForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
             <button type="submit">Send Message</button>
         </form>
+        <p id="statusMessage" style="color: green; display: none;">Your message has been sent successfully!</p>
+        <p id="errorMessage" style="color: red; display: none;">There was an error sending your message. Please try again.</p>
     </div>
-	<script>
- 	 document.addEventListener("contextmenu", function (event) {
-    	event.preventDefault();
- 	 });
-	document.addEventListener("copy", function (event) {
-	    event.preventDefault();
-    	alert("Copying is disabled on this website.");
-	  });
-	document.addEventListener("keydown", function (event) {
-    	if ((event.ctrlKey && event.key === "c") || (event.metaKey && event.key === "c")) {
-      	event.preventDefault();
-      	alert("Copying is disabled.");
-    	}
-  	});
-	</script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
+            authDomain: "login-1d138.firebaseapp.com",
+            projectId: "login-1d138",
+            storageBucket: "login-1d138.firebasestorage.app",
+            messagingSenderId: "823918375870",
+            appId: "1:823918375870:web:13db570de493498df33fef"
+        };
+	    
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(app);
+
+        const contactForm = document.getElementById('contactForm');
+        const statusMessage = document.getElementById('statusMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        contactForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+		
+            if (name && email && message) {
+                db.collection("contactMessages").add({
+                    name: name,
+                    email: email,
+                    message: message,
+                    timestamp: new Date()
+                })
+                .then(() => {
+                    statusMessage.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                    contactForm.reset();
+                })
+                .catch((error) => {
+                    errorMessage.style.display = 'block';
+                    statusMessage.style.display = 'none';
+                    console.error("Error sending message:", error);
+                });
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+
+        document.addEventListener("contextmenu", function (event) {
+            event.preventDefault();
+        });
+
+        document.addEventListener("copy", function (event) {
+            event.preventDefault();
+            alert("Copying is disabled on this website.");
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if ((event.ctrlKey && event.key === "c") || (event.metaKey && event.key === "c")) {
+                event.preventDefault();
+                alert("Copying is disabled.");
+            }
+        });
+    </script>
 </body>
 </html>
