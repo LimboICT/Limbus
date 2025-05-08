@@ -237,15 +237,15 @@
   </div>
 
   <div class="login-signup-btns">
-    <a href="Login.html">Log In</a>
-    <a href="Signup.html">Sign Up</a>
+    <a href="Login.html" id="login-btn">Log In</a>
+    <a href="Signup.html" id="signup-btn">Sign Up</a>
+    <a href="#" id="logout-btn" style="display: none;">Log Out</a>
   </div>
 
 <script type="module" src="firebaseAuth.js"></script>
 
   <script>
     window.onload = function() {
-      checkUserAuth(); 
       startImageSlider(); 
     };
 
