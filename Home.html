@@ -193,7 +193,6 @@
       <a href="cart.html" class="cart-btn">Cart</a>
     </div>
     <span id="user-welcome" style="display: none; margin-left: 10px; color: white;"></span>
-    
   </div>
 
   <div class="categories">
@@ -247,8 +246,46 @@
 <script type="module" src="firebaseAuth.js"></script>
 
   <script>
+    const auth = firebase.auth();
+
+    function checkUserAuth() {
+      firebase.auth().onAuthStateChanged((user) => {
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userWelcome = document.getElementById('user-welcome');
+        
+        if (user) {
+          loginBtn.style.display = 'none';
+          signupBtn.style.display = 'none';
+          logoutBtn.style.display = 'inline-block';
+          userWelcome.style.display = 'inline-block';
+          userWelcome.innerText = `Welcome, ${user.displayName || 'User'}`;
+        } else {
+          loginBtn.style.display = 'inline-block';
+          signupBtn.style.display = 'inline-block';
+          logoutBtn.style.display = 'none';
+          userWelcome.style.display = 'none';
+        }
+      });
+    }
+
+    function handleLogout() {
+      const logoutBtn = document.getElementById('logout-btn');
+      logoutBtn.addEventListener('click', () => {
+        firebase.auth().signOut().then(() => {
+          alert('You have logged out.');
+          location.reload();
+        }).catch((error) => {
+          console.error('Error logging out:', error.message);
+        });
+      });
+    }
+
     window.onload = function() {
-      startImageSlider(); 
+      checkUserAuth();
+      startImageSlider();
+      handleLogout();
     };
 
     function startImageSlider() {
@@ -270,8 +307,6 @@
         });
       }, 2000);
     }
-
-    window.onload = startImageSlider;
   </script>
 
 </body>
