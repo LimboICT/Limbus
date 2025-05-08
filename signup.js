@@ -18,31 +18,37 @@
 
   // Sign Up function
   document.getElementById("signup-button").addEventListener("click", () => {
-    const username = document.getElementById("username").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirm-password").value;
+  const username = document.getElementById("username").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirm-password").value;
 
-    if (!username || !email || !password || !confirmPassword) {
-      alert("Please fill in all fields.");
-      return;
-    }
+  // Check if any fields are empty
+  if (!username || !email || !password || !confirmPassword) {
+    alert("Please fill in all fields.");
+    return;
+  }
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
+  // Check if passwords match
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        alert("Sign-up successful!");
-        console.log("User created:", userCredential.user);
+  // Firebase Auth: Create a user with email and password
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Successfully created user
+      alert("Sign-up successful!");
+      console.log("User created:", userCredential.user);
 
-        window.location.href = "Login.html";
-      })
-      .catch((error) => {
-        console.error("Sign-up error:", error);
-        alert("Error: " + error.message);
-      });
-  });
+      // Redirect to the login page
+      window.location.href = "Login.html";  // This will redirect to your login page
+    })
+    .catch((error) => {
+      // Error occurred during sign-up
+      console.error("Sign-up error:", error);
+      alert("Error: " + error.message);
+    });
+});
 </script>
