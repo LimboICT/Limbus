@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Product Page</title>
+    <title>Limbus - Product Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -121,24 +121,12 @@
             font-size: 16px;
         }
         @keyframes popupIn {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.3);
-            }
-            100% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         }
         @keyframes popupOut {
-            0% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.3);
-            }
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
         }
         #success-popup.show {
             display: block;
@@ -189,16 +177,14 @@
             document.body.style.opacity = 1;
         }
         window.addEventListener('load', function () {
-            setTimeout(function () {
-                document.body.style.opacity = 1;
-            }, 10);
+            setTimeout(() => document.body.style.opacity = 1, 10);
         });
+
         function fadeOutAndGoBack() {
             document.body.style.opacity = 0;
-            setTimeout(function () {
-                history.back();
-            }, 500);
+            setTimeout(() => history.back(), 500);
         }
+
         const params = new URLSearchParams(window.location.search);
         const name = params.get('name');
         const price = params.get('price');
@@ -208,31 +194,28 @@
         const editMode = params.get('edit') === 'true';
         const itemIndex = params.get('index');
 
+        const color1 = params.get('color1');
+        const color1Image = params.get('color1Image');
+        const color2 = params.get('color2');
+        const color2Image = params.get('color2Image');
+        const color3 = params.get('color3');
+        const color3Image = params.get('color3Image');
+
         if (name && price && image) {
             document.getElementById('product-name').textContent = name;
             document.getElementById('product-price').textContent = `₱${price}`;
             document.getElementById('product-image').src = image;
 
-            if (!hasColor) {
-                document.getElementById('color-option').style.display = 'none';
-            }
-
-            if (!hasSize) {
-                document.getElementById('size-option').style.display = 'none';
-            }
+            if (!hasColor) document.getElementById('color-option').style.display = 'none';
+            if (!hasSize) document.getElementById('size-option').style.display = 'none';
 
             if (editMode && itemIndex !== null) {
                 const cart = JSON.parse(localStorage.getItem("cart")) || [];
                 const currentItem = cart[itemIndex];
-
                 if (currentItem) {
                     document.getElementById('quantity').value = currentItem.quantity || 1;
-                    if (hasColor && currentItem.color) {
-                        document.getElementById('color').value = currentItem.color;
-                    }
-                    if (hasSize && currentItem.size) {
-                        document.getElementById('size').value = currentItem.size;
-                    }
+                    if (hasColor && currentItem.color) document.getElementById('color').value = currentItem.color;
+                    if (hasSize && currentItem.size) document.getElementById('size').value = currentItem.size;
                     updatePrice(parseFloat(price), currentItem.quantity);
                     document.querySelector('.add-cart-btn').textContent = 'Confirm Edit';
                 }
@@ -253,25 +236,36 @@
             updatePrice(parseFloat(price), quantity);
         });
 
+        const colorSelect = document.getElementById('color');
+        colorSelect.addEventListener('change', function () {
+            const selectedColor = colorSelect.value;
+            if (selectedColor === color1) {
+                document.getElementById('product-image').src = color1Image;
+            } else if (selectedColor === color2) {
+                document.getElementById('product-image').src = color2Image;
+            } else if (selectedColor === color3) {
+                document.getElementById('product-image').src = color3Image;
+            }
+        });
+
         function showSuccessPopup(message) {
-            const successPopup = document.getElementById("success-popup");
+            const popup = document.getElementById("success-popup");
             const overlay = document.getElementById("dark-overlay");
             const sound = document.getElementById("success-sound");
 
             overlay.style.display = "block";
-            successPopup.style.display = "block";
-            successPopup.classList.remove("hide");
-            successPopup.querySelector("p").textContent = message;
-            successPopup.classList.add("show");
-			sound.volume = 0.2;
+            popup.querySelector("p").textContent = message;
+            popup.classList.remove("hide");
+            popup.classList.add("show");
+            sound.volume = 0.2;
             sound.currentTime = 0;
             sound.play();
 
             setTimeout(() => {
-                successPopup.classList.remove("show");
-                successPopup.classList.add("hide");
+                popup.classList.remove("show");
+                popup.classList.add("hide");
                 setTimeout(() => {
-                    successPopup.style.display = "none";
+                    popup.style.display = "none";
                     overlay.style.display = "none";
                 }, 300);
             }, 2000);
@@ -282,44 +276,43 @@
             const selectedSize = document.getElementById('size').value;
             const selectedQuantity = document.getElementById('quantity').value;
 
+            if (hasColor && !selectedColor) return alert("Please select a color.");
+            if (hasSize && !selectedSize) return alert("Please select a size.");
+            if (selectedQuantity < 1) return alert("Please enter a valid quantity.");
+
+            const cartItem = {
+                name,
+                price,
+                image: document.getElementById('product-image').src,
+                color: hasColor ? selectedColor : null,
+                size: hasSize ? selectedSize : null,
+                quantity: selectedQuantity
+            };
+
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
             if (editMode) {
-                const cart = JSON.parse(localStorage.getItem("cart"));
-                const updatedItem = {
-                    name,
-                    price,
-                    image,
-                    color: hasColor ? selectedColor : null,
-                    size: hasSize ? selectedSize : null,
-                    quantity: selectedQuantity
-                };
-                cart[itemIndex] = updatedItem;
-                localStorage.setItem("cart", JSON.stringify(cart));
+                cart[itemIndex] = cartItem;
                 showSuccessPopup("Item Updated");
-                setTimeout(function() {
-                    window.location.href = localStorage.getItem("previousPage") || "cart.html";
-                }, 2000);
             } else {
-                const cartItem = {
-                    name,
-                    price,
-                    image,
-                    color: hasColor ? selectedColor : null,
-                    size: hasSize ? selectedSize : null,
-                    quantity: selectedQuantity
-                };
-                const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
-                currentCart.push(cartItem);
-                localStorage.setItem("cart", JSON.stringify(currentCart));
+                cart.push(cartItem);
                 showSuccessPopup("Added to Cart");
-                setTimeout(function() {
-                    window.location.href = localStorage.getItem("previousPage") || "products.html";
-                }, 2000);
             }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            setTimeout(() => {
+                window.location.href = localStorage.getItem("previousPage") || (editMode ? "cart.html" : "products.html");
+            }, 2000);
         }
 
-        window.onload = function() {
+        window.onload = function () {
             if (document.referrer) {
                 localStorage.setItem("previousPage", document.referrer);
+            }
+
+            if (editMode && hasColor) {
+                colorSelect.dispatchEvent(new Event('change'));
             }
         };
     </script>
