@@ -240,19 +240,19 @@
     </div>
 
     <script>
-		function toggleSidebar() {
-			const sidebar = document.getElementById('sidebar');
-			sidebar.style.left = sidebar.style.left === '0px' ? '-250px' : '0px';
-		}
+	function toggleSidebar() {
+		const sidebar = document.getElementById('sidebar');
+		sidebar.style.left = sidebar.style.left === '0px' ? '-250px' : '0px';
+	}
 
-		function viewProduct(name, price, image, color1, color1Image, color2, color2Image, color3, color3Image) {
-			document.body.style.opacity = 0;
+	function viewProduct(name, price, image, color1, color1Image, color2, color2Image, color3, color3Image) {
+		document.body.style.opacity = 0;
 
-			setTimeout(() => {
-				const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&color1=${encodeURIComponent(color1)}&color1Image=${encodeURIComponent(color1Image)}&color2=${encodeURIComponent(color2)}&color2Image=${encodeURIComponent(color2Image)}&color3=${encodeURIComponent(color3)}&color3Image=${encodeURIComponent(color3Image)}&hasColor=true&hasSize=true`;
-				window.location.href = url;
-			}, 500);
-		}
+		setTimeout(() => {
+			const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&color1=${encodeURIComponent(color1)}&color1Image=${encodeURIComponent(color1Image)}&color2=${encodeURIComponent(color2)}&color2Image=${encodeURIComponent(color2Image)}&color3=${encodeURIComponent(color3)}&color3Image=${encodeURIComponent(color3Image)}&hasColor=true&hasSize=true`;
+			window.location.href = url;
+		}, 500);
+	}
         
         window.addEventListener('load', () => {
             document.body.classList.add('fade-in');
