@@ -235,69 +235,70 @@
     </div>
 
     <div class="login-signup-btns">
-    <a href="Login.html" id="login-btn">Log In</a>
-    <a href="Signup.html" id="signup-btn">Sign Up</a>
-    <a href="#" id="logout-btn" style="display: none;">Log Out</a>
-  </div>
+        <a href="Login.html" id="login-btn">Log In</a>
+        <a href="Signup.html" id="signup-btn">Sign Up</a>
+        <a href="#" id="logout-btn" style="display: none;">Log Out</a>
+        <span id="user-welcome" style="display: none; margin-left: 20px; color: black; font-size: 16px;"></span>
+    </div>
 
-<script type="module" src="firebaseAuth.js"></script>
+    <script type="module" src="firebaseAuth.js"></script>
 
-  <script>
-    const auth = firebase.auth();
+    <script>
+        const auth = firebase.auth();
 
-    function checkUserAuth() {
-      firebase.auth().onAuthStateChanged((user) => {
-        const loginBtn = document.getElementById('login-btn');
-        const signupBtn = document.getElementById('signup-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const userWelcome = document.getElementById('user-welcome');
-        
-        if (user) {
-          loginBtn.style.display = 'none';
-          signupBtn.style.display = 'none';
-          logoutBtn.style.display = 'inline-block';
-          userWelcome.style.display = 'inline-block';
-          userWelcome.innerText = `Welcome, ${user.displayName || 'User'}`;
-        } else {
-          loginBtn.style.display = 'inline-block';
-          signupBtn.style.display = 'inline-block';
-          logoutBtn.style.display = 'none';
-          userWelcome.style.display = 'none';
+        function checkUserAuth() {
+            firebase.auth().onAuthStateChanged((user) => {
+                const loginBtn = document.getElementById('login-btn');
+                const signupBtn = document.getElementById('signup-btn');
+                const logoutBtn = document.getElementById('logout-btn');
+                const userWelcome = document.getElementById('user-welcome');
+                
+                if (user) {
+                    loginBtn.style.display = 'none';
+                    signupBtn.style.display = 'none';
+                    logoutBtn.style.display = 'inline-block';
+                    userWelcome.style.display = 'inline-block';
+                    userWelcome.innerText = `Welcome, ${user.displayName || 'User'}`;
+                } else {
+                    loginBtn.style.display = 'inline-block';
+                    signupBtn.style.display = 'inline-block';
+                    logoutBtn.style.display = 'none';
+                    userWelcome.style.display = 'none';
+                }
+            });
         }
-      });
-    }
 
-    function handleLogout() {
-      const logoutBtn = document.getElementById('logout-btn');
-      logoutBtn.addEventListener('click', () => {
-        firebase.auth().signOut().then(() => {
-          alert('You have logged out.');
-          location.reload();
-        }).catch((error) => {
-          console.error('Error logging out:', error.message);
-        });
-      });
-    }
+        function handleLogout() {
+            const logoutBtn = document.getElementById('logout-btn');
+            logoutBtn.addEventListener('click', () => {
+                firebase.auth().signOut().then(() => {
+                    alert('You have logged out.');
+                    location.reload();
+                }).catch((error) => {
+                    console.error('Error logging out:', error.message);
+                });
+            });
+        }
 
-    window.onload = function() {
-      checkUserAuth();
-      startImageSlider();
-      handleLogout();
-    };
-	function toggleSidebar() {
-		const sidebar = document.getElementById('sidebar');
-		sidebar.style.left = sidebar.style.left === '0px' ? '-250px' : '0px';
-	}
+        window.onload = function() {
+            checkUserAuth();
+            handleLogout();
+        };
 
-	function viewProduct(name, price, image, color1, color1Image, color2, color2Image, color3, color3Image) {
-		document.body.style.opacity = 0;
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.left = sidebar.style.left === '0px' ? '-250px' : '0px';
+        }
 
-		setTimeout(() => {
-			const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&color1=${encodeURIComponent(color1)}&color1Image=${encodeURIComponent(color1Image)}&color2=${encodeURIComponent(color2)}&color2Image=${encodeURIComponent(color2Image)}&color3=${encodeURIComponent(color3)}&color3Image=${encodeURIComponent(color3Image)}&hasColor=true&hasSize=true`;
-			window.location.href = url;
-		}, 500);
-	}
-        
+        function viewProduct(name, price, image, color1, color1Image, color2, color2Image, color3, color3Image) {
+            document.body.style.opacity = 0;
+
+            setTimeout(() => {
+                const url = `ProductPage.html?name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&color1=${encodeURIComponent(color1)}&color1Image=${encodeURIComponent(color1Image)}&color2=${encodeURIComponent(color2)}&color2Image=${encodeURIComponent(color2Image)}&color3=${encodeURIComponent(color3)}&color3Image=${encodeURIComponent(color3Image)}&hasColor=true&hasSize=true`;
+                window.location.href = url;
+            }, 500);
+        }
+
         window.addEventListener('load', () => {
             document.body.classList.add('fade-in');
         });
