@@ -5,68 +5,129 @@
     <link rel="icon" href="limbus.png" type="image/png">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #f7f7f7;
             padding-top: 100px;
         }
+
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: black;
+            background-color: #222;
             padding: 15px 30px;
             color: white;
             position: fixed;
             top: 0;
             width: 100%;
-            box-sizing: border-box;
             z-index: 1000;
         }
+
         .menu a, .cart-btn {
             color: white;
             text-decoration: none;
             font-size: 16px;
-            padding: 10px 15px;
-            transition: background 0.3s;
+            padding: 10px 20px;
             border-radius: 5px;
+            transition: background 0.3s;
         }
+
         .menu a:hover, .cart-btn:hover {
             background: rgba(255, 255, 255, 0.2);
         }
+
         .checkout-container {
             width: 80%;
             margin: 0 auto;
+            padding-top: 80px;
         }
+
         .checkout-section {
-            margin-bottom: 20px;
-            padding: 20px;
             background-color: white;
-            border-radius: 5px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 25px;
         }
+
         .checkout-title {
+            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
         }
+
         .checkout-input {
             width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
             border: 1px solid #ddd;
+            font-size: 16px;
         }
+
+        .checkout-input:focus {
+            outline: none;
+            border-color: #333;
+        }
+
         .checkout-btn {
-            padding: 12px 24px;
-            background-color: black;
+            padding: 14px 28px;
+            background-color: #333;
             color: white;
             font-size: 16px;
-            border-radius: 5px;
-            text-decoration: none;
+            border-radius: 8px;
             cursor: pointer;
-            display: inline-block;
             margin-top: 20px;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .checkout-btn:hover {
+            background-color: #444;
+        }
+
+        .order-summary {
+            padding-top: 10px;
+            font-size: 16px;
+        }
+
+        .order-summary div {
+            margin-bottom: 8px;
+        }
+
+        .order-summary .total {
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .order-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-item-price {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        #gcash-number {
+            display: none;
         }
     </style>
 </head>
@@ -105,7 +166,10 @@
 
         <div class="checkout-section">
             <div class="checkout-title">Order Summary</div>
-            <div id="order-summary"></div>
+            <div id="order-summary" class="order-summary"></div>
+        </div>
+
+        <div class="checkout-section">
             <div class="checkout-btn" onclick="submitOrder()">Place Order</div>
         </div>
     </div>
@@ -116,13 +180,13 @@
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
-			    apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
-			    authDomain: "login-1d138.firebaseapp.com",
-			    projectId: "login-1d138",
-			    storageBucket: "login-1d138.firebasestorage.app",
-			    messagingSenderId: "823918375870",
-			    appId: "1:823918375870:web:13db570de493498df33fef"
-		    };
+            apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
+            authDomain: "login-1d138.firebaseapp.com",
+            projectId: "login-1d138",
+            storageBucket: "login-1d138.firebasestorage.app",
+            messagingSenderId: "823918375870",
+            appId: "1:823918375870:web:13db570de493498df33fef"
+        };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -147,11 +211,17 @@
             cart.forEach(item => {
                 total += item.price * item.quantity;
                 orderSummary.innerHTML += `
-                    <div>${item.name} - ₱${item.price} x ${item.quantity}</div>
+                    <div class="order-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="order-item-details">
+                            <div>${item.name} - ${item.color || 'No color'} - ${item.size || 'No size'} - x${item.quantity}</div>
+                            <div class="order-item-price">₱${(item.price * item.quantity).toFixed(2)}</div>
+                        </div>
+                    </div>
                 `;
             });
 
-            orderSummary.innerHTML += `<div>Total: ₱${total.toFixed(2)}</div>`;
+            orderSummary.innerHTML += `<div class="total">Total: ₱${total.toFixed(2)}</div>`;
         }
 
         document.getElementById("payment-method").addEventListener("change", function () {
@@ -195,5 +265,6 @@
             }
         }
     </script>
+
 </body>
 </html>
