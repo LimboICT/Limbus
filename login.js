@@ -1,8 +1,8 @@
-// Import Firebase
+// Import necessary Firebase modules
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js';
 
-// Firebase config
+// Firebase configuration object (use your actual Firebase config)
 const firebaseConfig = {
   apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
   authDomain: "login-1d138.firebaseapp.com",
@@ -16,39 +16,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Pressing Enter triggers login
-document.addEventListener("keydown", function (event) {
-  if (event.key === "Enter") {
-    document.getElementById("login-button").click();
-  }
-});
-
-// Login button logic
+// Handle login when the button is clicked
 document.getElementById("login-button").addEventListener("click", () => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
-  const confirmPassword = document.querySelector('[name="confirm"]').value.trim();
 
-  if (!email || !password || !confirmPassword) {
+  // Basic validation
+  if (!email || !password) {
     alert("Please fill in all fields.");
     return;
   }
 
-  if (password !== confirmPassword) {
-    alert("Passwords do not match.");
-    return;
-  }
-
-  // Firebase login
+  // Sign in with Firebase Authentication
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
+      // Successfully logged in
       const user = userCredential.user;
       console.log("Logged in:", user);
       alert("Login successful!");
-      window.location.href = "Home.html";
+
+      // Redirect to a dashboard or home page after successful login
+      window.location.href = "index.html"; // Change this to your desired page
     })
     .catch((error) => {
+      // Handle errors
       console.error("Login error:", error.message);
       alert("Error: " + error.message);
     });
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    document.getElementById("login-button").click();
+  }
 });
