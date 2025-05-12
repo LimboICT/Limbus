@@ -10,16 +10,21 @@ const firebaseConfig = {
   appId: "1:823918375870:web:13db570de493498df33fef"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-document.getElementById("signup-button").addEventListener("click", () => {
+const signup = () => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirm-password").value.trim();
 
-  if (!email || !password) {
+  if (!email || !password || !confirmPassword) {
     alert("Please fill in all fields.");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
     return;
   }
 
@@ -34,4 +39,13 @@ document.getElementById("signup-button").addEventListener("click", () => {
       console.error("Sign-up error:", error.message);
       alert("Error: " + error.message);
     });
+};
+
+document.getElementById("signup-button").addEventListener("click", signup);
+
+// Allow Enter key to submit form
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    signup();
+  }
 });
