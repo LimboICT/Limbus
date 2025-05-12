@@ -68,5 +68,12 @@
         </div>
     </div>
     <script type="module" src="login.js"></script>
+    <script>
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+          document.getElementById('login-button').click();
+        }
+      });
+    </script>
 </body>
 </html>
