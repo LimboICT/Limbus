@@ -1,8 +1,8 @@
-// Import necessary Firebase modules
+// Import Firebase
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js';
 
-// Firebase configuration object (use your actual Firebase config)
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
   authDomain: "login-1d138.firebaseapp.com",
@@ -16,30 +16,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Handle login when the button is clicked
+// Pressing Enter triggers login
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    document.getElementById("login-button").click();
+  }
+});
+
+// Login button logic
 document.getElementById("login-button").addEventListener("click", () => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.querySelector('[name="confirm"]').value.trim();
 
-  // Basic validation
-  if (!email || !password) {
+  if (!email || !password || !confirmPassword) {
     alert("Please fill in all fields.");
     return;
   }
 
-  // Sign in with Firebase Authentication
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  // Firebase login
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // Successfully logged in
       const user = userCredential.user;
       console.log("Logged in:", user);
       alert("Login successful!");
-
-      // Redirect to a dashboard or home page after successful login
-      window.location.href = "Home.html"; // Change this to your desired page
+      window.location.href = "Home.html";
     })
     .catch((error) => {
-      // Handle errors
       console.error("Login error:", error.message);
       alert("Error: " + error.message);
     });
