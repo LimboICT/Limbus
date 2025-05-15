@@ -32,8 +32,9 @@ const signup = () => {
     .then((userCredential) => {
       const user = userCredential.user;
       console.log("User created:", user);
-      alert("Sign-up successful!");
-      window.location.href = "Login.html";
+      
+      // Redirect with email as URL parameter
+      window.location.href = `Login.html?email=${encodeURIComponent(email)}`;
     })
     .catch((error) => {
       console.error("Sign-up error:", error.message);
@@ -41,9 +42,10 @@ const signup = () => {
     });
 };
 
+// Signup button click handler
 document.getElementById("signup-button").addEventListener("click", signup);
 
-// Allow Enter key to submit form
+// Enter key submission
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     signup();
