@@ -92,6 +92,9 @@
         <div class="logo">Limbus</div>
         <div class="menu">
             <a href="Home.html">Home</a>
+            <a href="Help.html">Help</a>
+            <a href="More.html">More</a>
+            <a href="About.html">About Us</a>
             <a href="Contact.html">Contact Us</a>
         </div>
         <div>
@@ -174,7 +177,7 @@
             let total = 0;
             cart.forEach(item => {
                 total += item.price * item.quantity;
-                summary.innerHTML += 
+                summary.innerHTML += `
                     <div class="order-item">
                         <img src="${item.image}" alt="${item.name}">
                         <div>
@@ -183,9 +186,9 @@
                             <div>Color: ${item.color || 'N/A'} | Size: ${item.size || 'N/A'}</div>
                         </div>
                     </div>
-                ;
+                `;
             });
-            summary.innerHTML += <hr><strong>Total: ₱${total.toFixed(2)}</strong>;
+            summary.innerHTML += `<hr><strong>Total: ₱${total.toFixed(2)}</strong>`;
         }
 
         document.getElementById("place-order-btn").addEventListener("click", async function() {
